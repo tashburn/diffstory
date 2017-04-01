@@ -24,6 +24,15 @@ test('strings', () => {
   )
 })
 
+test('stringDiffToOperations', () => {
+  const ops = diffstory.stringDiffToOperations('-"a"^1+"c"')
+  expect(ops).toEqual([
+    {'-':'a'},
+    {'^':1},
+    {'+':'c'},
+  ])
+})
+
 test('objects', () => {
   run(
     { a:1, b:2, c:3 },

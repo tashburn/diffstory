@@ -41,7 +41,7 @@ export function diffStrings(s1, s2) {
 }
 
 
-export function forwardString(text, diff) {
+export function stringDiffToOperations(diff) {
   const parts = []
   let ix = 0
   const stream = new StringStream(diff)
@@ -49,26 +49,51 @@ export function forwardString(text, diff) {
     const instr = stream.readChar()
     if (instr == '^') { // skip
       const skipCount = Number(stream.readWhile(ch => isCharNumber(ch)))
-      const skipped = text.substring(ix,ix+skipCount)
-      parts.push(skipped)
+      // const skipped = text.substring(ix,ix+skipCount)
+      // parts.push(skipped)
+      parts.push({'^':skipCount})
       ix += skipCount
     }
     else if (instr == '+') { // add
       stream.readChar('"')
       const added = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
       stream.readChar('"')
-      parts.push(added)
+      // parts.push(added)
+      parts.push({'+':added})
     }
     else if (instr == '-') { // remove
       stream.readChar('"')
       const removed = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
       stream.readChar('"')
       ix += removed.length
+      parts.push({'-':removed})
     }
     else {
       throw 'bad instruction '+instr
     }
   }
+  return parts
+}
+
+
+export function forwardString(text, diff) {
+  const parts = []
+  let ix = 0
+  stringDiffToOperations(diff).forEach(part => {
+    if ('^' in part) {
+      const skipCount = part['^']
+      const skipped = text.substring(ix,ix+skipCount)
+      parts.push(skipped)
+      ix += skipCount
+    }
+    else if ('+' in part) {
+      parts.push(part['+'])
+    }
+    else if ('-' in part) {
+      ix += part['-'].length
+    }
+    else throw 'bad instruction '+JSON.stringify(part)
+  })
   parts.push(text.substring(ix))
   return parts.join('')
 }
@@ -77,32 +102,30 @@ export function forwardString(text, diff) {
 export function backwardString(text, diff) {
   const parts = []
   let ix = 0
-  const stream = new StringStream(diff)
-  while (!stream.atEnd()) {
-    const instr = stream.readChar()
-    if (instr == '^') { // skip
-      const skipCount = Number(stream.readWhile(ch => isCharNumber(ch)))
+  stringDiffToOperations(diff).forEach(part => {
+    if ('^' in part) {
+      const skipCount = part['^']
       const skipped = text.substring(ix,ix+skipCount)
       parts.push(skipped)
       ix += skipCount
     }
-    else if (instr == '+') { // add
-      stream.readChar('"')
-      const removed = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
-      stream.readChar('"')
-      ix += removed.length
+    else if ('+' in part) {
+      ix += part['+'].length
     }
-    else if (instr == '-') { // remove
-      stream.readChar('"')
-      const added = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
-      stream.readChar('"')
-      parts.push(added)
+    else if ('-' in part) {
+      parts.push(part['-'])
     }
-  }
+    else throw 'bad instruction '+JSON.stringify(part)
+  })
   parts.push(text.substring(ix))
   return parts.join('')
 }
 
 
-export default { diffStrings, forwardString, backwardString }
+export default {
+  diffStrings, 
+  stringDiffToOperations, 
+  forwardString, 
+  backwardString,
+}
 

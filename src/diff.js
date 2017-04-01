@@ -6,7 +6,7 @@ import { isBoolean, isNumber, isString, isObject, isArray } from './util/identif
 import { ADD, REMOVE, UPDATE, CUT, PASTE, NEW, OLD, SKIP } from './instructions'
 import { diffObjects, forwardObject, backwardObject } from './diffObjects'
 import { diffArrays, forwardArray, backwardArray } from './diffArrays'
-import { diffStrings, forwardString, backwardString } from './diffStrings'
+import { diffStrings, forwardString, backwardString, stringDiffToOperations } from './diffStrings'
 
 
 export function diff(thing1, thing2) {
@@ -72,4 +72,9 @@ export function backward(thing, diff) {
 }
 
 
-export default { diff, forward, backward }
+export default { 
+  diff, 
+  forward, 
+  backward, 
+  stringDiffToOperations 
+}
