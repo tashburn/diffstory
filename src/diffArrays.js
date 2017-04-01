@@ -1,12 +1,14 @@
 import isEqual from 'lodash/isEqual'
 import intersection from 'lodash/intersection'
 import keys from 'lodash/keys'
+import concat from 'lodash/concat'
 
 import { longestCommonSubsequence } from './util/lcs'
 import diffObjects from './diffObjects'
 import { isObject, isArray, isDefined } from './util/identify'
+import { ADD, REMOVE, SKIP, CUT, PASTE } from './instructions'
 
-export default function diffArrays(arr1, arr2) {
+export function diffArrays(arr1, arr2) {
 
   // find LCS
   const info = longestCommonSubsequence(arr1, arr2)
@@ -96,3 +98,166 @@ export default function diffArrays(arr1, arr2) {
 
   return ret
 }
+
+
+export function forwardArray(thing, diff) {
+
+  // collect the cuts first
+  let ix = 0
+  const cuts = {}
+  diff.forEach(part => {
+    if (SKIP in part) {
+      const members = thing.slice(ix, ix+part[SKIP])
+      ix += part[SKIP]
+    }
+    else if (ADD in part) {
+    }
+    else if (REMOVE in part) {
+      ix += part[REMOVE].length
+    }
+    else if (UPDATE in part) {
+      ix += 1
+    }
+    else {
+      // any cuts or pastes?
+      const key = keys(part)[0]        
+      if (key.startsWith(CUT)) {
+        const count = part[key]
+        const members = thing.slice(ix, ix+count)
+        cuts[key] = members
+        ix += count
+      }
+      else if (key.startsWith(PASTE)) {
+      }
+      else {
+        throw 'Bad part: '+JSON.stringify(part)
+      }
+
+    }
+  })
+
+  // now compose our new array
+  let ret = []
+  ix = 0 // reset
+  diff.forEach(part => {
+
+    if (SKIP in part) {
+      const members = thing.slice(ix, ix+part[SKIP])
+      ret = concat(ret, members)
+      ix += part[SKIP]
+    }
+    else if (ADD in part) {
+      ret = concat(ret, part[ADD])
+    }
+    else if (REMOVE in part) {
+      ix += part[REMOVE].length
+    }
+    else if (UPDATE in part) {
+      const member = forward(thing[ix], part)
+      ret.push(member)
+      ix += 1
+    }
+    else {
+
+      // any cuts or pastes?
+      const key = keys(part)[0]
+      
+      if (key.startsWith(CUT)) {
+      }
+      else if (key.startsWith(PASTE)) {
+        const cutsKey = CUT+key.substring(PASTE.length)
+        const members = cuts[cutsKey]
+        ret = concat(ret, members)
+      }
+      else {
+        throw 'Bad part: '+JSON.stringify(part)
+      }
+
+    }
+  })
+  
+  return ret
+}
+
+
+export function backwardArray(thing, diff) {
+  // collect the pastes first
+  let ix = 0
+  const pastes = {}
+  diff.forEach(part => {
+    if (SKIP in part) {
+      const members = thing.slice(ix, ix+part[SKIP])
+      ix += part[SKIP]
+    }
+    else if (ADD in part) {
+      ix += part[ADD].length
+    }
+    else if (REMOVE in part) {
+    }
+    else if (UPDATE in part) {
+      ix += 1
+    }
+    else {
+      // any cuts or pastes?
+      const key = keys(part)[0]        
+      if (key.startsWith(CUT)) {
+      }
+      else if (key.startsWith(PASTE)) {
+        const count = part[key]
+        const members = thing.slice(ix, ix+count)
+        pastes[key] = members
+        ix += count
+      }
+      else {
+        throw 'Bad part: '+JSON.stringify(part)
+      }
+
+    }
+  })
+
+  // now compose our new array
+  let ret = []
+  ix = 0 // reset
+  diff.forEach(part => {
+
+    if (SKIP in part) {
+      const members = thing.slice(ix, ix+part[SKIP])
+      ret = concat(ret, members)
+      ix += part[SKIP]
+    }
+    else if (ADD in part) {
+      ix += part[ADD].length
+    }
+    else if (REMOVE in part) {
+      ret = concat(ret, part[REMOVE])
+    }
+    else if (UPDATE in part) {
+      const member = backward(thing[ix], part)
+      ret.push(member)
+      ix += 1
+    }
+    else {
+
+      // any cuts or pastes?
+      const key = keys(part)[0]
+      
+      if (key.startsWith(CUT)) {
+        const pastesKey = PASTE+key.substring(CUT.length)
+        const members = pastes[pastesKey]
+        ret = concat(ret, members)
+      }
+      else if (key.startsWith(PASTE)) {
+        ix += 1
+      }
+      else {
+        throw 'Bad part: '+JSON.stringify(part)
+      }
+
+    }
+  })
+  
+  return ret
+}
+
+
+export default { diffArrays, forwardArray, backwardArray }

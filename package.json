@@ -17,7 +17,7 @@
     "type": "git",
     "url": "git://github.com/tashburn/diffstory.git"
   },
-  "main": "src/index.js",
+  "main": "src/diff.js",
   "scripts": {
     "test": "jest"
   },

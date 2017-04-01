@@ -1,7 +1,9 @@
 import { longestCommonSubstring } from './util/lcs'
+import { isCharNumber } from './util/identify'
+import StringStream from './util/StringStream'
 
 
-export default function diffStrings(s1, s2) {
+export function diffStrings(s1, s2) {
 
   // find LCS
   const info = longestCommonSubstring(s1, s2)
@@ -37,3 +39,70 @@ export default function diffStrings(s1, s2) {
 
   return ret
 }
+
+
+export function forwardString(text, diff) {
+  const parts = []
+  let ix = 0
+  const stream = new StringStream(diff)
+  while (!stream.atEnd()) {
+    const instr = stream.readChar()
+    if (instr == '^') { // skip
+      const skipCount = Number(stream.readWhile(ch => isCharNumber(ch)))
+      const skipped = text.substring(ix,ix+skipCount)
+      parts.push(skipped)
+      ix += skipCount
+    }
+    else if (instr == '+') { // add
+      stream.readChar('"')
+      const added = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
+      stream.readChar('"')
+      parts.push(added)
+    }
+    else if (instr == '-') { // remove
+      stream.readChar('"')
+      const removed = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
+      stream.readChar('"')
+      ix += removed.length
+    }
+    else {
+      throw 'bad instruction '+instr
+    }
+  }
+  parts.push(text.substring(ix))
+  return parts.join('')
+}
+
+
+export function backwardString(text, diff) {
+  const parts = []
+  let ix = 0
+  const stream = new StringStream(diff)
+  while (!stream.atEnd()) {
+    const instr = stream.readChar()
+    if (instr == '^') { // skip
+      const skipCount = Number(stream.readWhile(ch => isCharNumber(ch)))
+      const skipped = text.substring(ix,ix+skipCount)
+      parts.push(skipped)
+      ix += skipCount
+    }
+    else if (instr == '+') { // add
+      stream.readChar('"')
+      const removed = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
+      stream.readChar('"')
+      ix += removed.length
+    }
+    else if (instr == '-') { // remove
+      stream.readChar('"')
+      const added = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
+      stream.readChar('"')
+      parts.push(added)
+    }
+  }
+  parts.push(text.substring(ix))
+  return parts.join('')
+}
+
+
+export default { diffStrings, forwardString, backwardString }
+

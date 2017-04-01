@@ -1,28 +1,40 @@
 # diffstory
 
 A diff library for common Javascript structures that --
-- is small
-- is fast
-- handles objects, arrays, strings, numbers, booleans
+- is small and fast with minimal dependencies
+- handles objects, arrays, strings, numbers, booleans (the "supported types")
+- can diff from one structure to the other, even if different types
 - produces small human-readable diffs
+- diffs are composed of basic Javascript structures that are easily serializable
 - can use a diff to "time-travel" a structure forward
 - can use a diff to "time-travel" a structure backwards
-- uses a fast "smallest common subsequence" algorithm for string and array diffs
+- uses a fast "smallest common subsequence" algorithm for nice diffs of strings and arrays
 - for objects, diffs can represent additions, removals, and updates
-- for arrays, diffs can represent additions, removals, and (for elements that are objects or arrays) also updates and single-member reorderings.
-- for strings, the diff is a compact format
+- for arrays, diffs can represent additions, removals, and also (for elements that are objects or arrays) updates and single-member reorderings.
+- for strings, the diff is a compact string-based format, which can be converted to a processable "list of operations"
 
-It can diff from one structure to another, provided the structures are (and contain) instances of supported types.
+The intention of this library is to assist in managing revision histories of data structures.
 
-The intention of this library is to enable a revision history.
+## Installation
+
+```
+npm i --save diffstory
+```
 
 ## Basic Usage
 
 ```
 import diffstory from 'diffstory'
-const o1 = { a:1, b:2 }
-const o2 = { b:20, c:3 }
-diffstory.diff(o1,o2) // returns { add:{c:3}, remove:{a:1}, update:{b:{old:2,new:20}} }
+
+const obj1 = { a:1, b:2 }
+const obj2 = { b:20, c:3 }
+const diff = diffstory.diff(obj1, obj2) 
+
+// diff is { 
+//   add:{c:3}, 
+//   remove:{a:1}, 
+//   update:{b:{old:2,new:20}}
+// }
 ```
 
 ## Diffing Objects
@@ -31,8 +43,9 @@ Additions
 ```
 diffstory.diff(
   { a:1 },
-  { a:1, b:2 }
-) // returns { add:{b:2} }
+  { a:1, b:2 }) 
+
+// returns { add:{b:2} }
 ```
 
 Removals
@@ -87,30 +100,59 @@ diffstory.diff(a,b)
 
 ## Diffing Strings
 
-For strings, diffs use "longest common subsequence" diffing in a compact format.
+For strings, diffs use "longest common subsequence" diffing in a compact format. The format was made a string so its type could be used to distinguish it from other kinds of diffs, especially when we diff complex nested structures.
 
 Additions
 ```
-a = "a"
-b = "ab"
-diffstory.diff(a,b)
+diffstory.diff('a','ab')
+
 // returns '^1+"b"' (^ means `skip`, + means `add`)
 ```
 
 Removals
 ```
-a = "ab"
-b = "a"
-diffstory.diff(a,b)
+diffstory.diff('ab','a')
+
 // returns '^1-"b"' (^ means `skip`, - means `remove`)
+```
+
+## Processing String Diffs
+
+A diff of strings like `'-"a"^1+"c"'` is compact but not very processable. You can get it as an array of operations instead --
+```
+[
+  {'-':"a"},
+  {'^':1},
+  {'+':"c"},
+]
+```
+
+To diff two strings directly to an array of operations, use `diffStringsToOperations`.
+```
+const ops = diffstory.diffStringsToOperations('ab','a')
+
+// ops is [
+//   {'^':1},
+//   {'-':"b"}
+// ]
+```
+
+To convert an existing diff of strings to an array of operations, use `stringDiffToOperations`.
+```
+const ops = diffstory.stringDiffToOperations('^1-"b"')
+
+// ops is [
+//   {'^':1},
+//   {'-':"b"}
+// ]
 ```
 
 ## Applying Diffs
 
 Forward
 ```
-a = "ab"
-b = "a"
+const a = "ab"
+const b = "a"
 diffstory.diff(a,b)
 bb = diffstory.forward(a,diff)
 // b === bb
@@ -118,8 +160,8 @@ bb = diffstory.forward(a,diff)
 
 Backward
 ```
-a = "ab"
-b = "a"
+const a = "ab"
+const b = "a"
 diffstory.diff(a,b)
 a = diffstory.backward(a,diff)
 // a === aa
