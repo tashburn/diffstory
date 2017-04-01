@@ -5,7 +5,7 @@ const cloneDeep = require('lodash/cloneDeep')
 const isEmpty = require('lodash/isEmpty')
 const isEqual = require('lodash/isEqual')
 
-const { diff as computeDiff } = require('./diff')
+const computeDiff = require('./diff').diff
 const { ADD, REMOVE, UPDATE, OLD, NEW } = require('./instructions')
 const { isString } = require('./util/identify')
 
