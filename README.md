@@ -3,12 +3,12 @@
 A diff library for Javascript objects that's --
 - small
 - fast
-- produces small two-way diffs
+- produces small human-readable diffs
 - can apply a diff forwards
 - can apply a diff backwards
-- diffs strings and arrays using a fast "smallest common subsequence" algorithm
-- for objects, can handle key additions, removals, and updates
-- for arrays, can handle additions, removals, updates (for objects and arrays), and single-member reorderings.
+- uses a fast "smallest common subsequence" algorithm for string and array diffs
+- for objects, diffs represent additions, removals, and updates
+- for arrays, diffs represent additions, removals, updates (for objects and arrays), and single-member reorderings.
 - for strings, the diff is a compact format
 
 Can diff from one structure to another, as long as that structure is a boolean, number, string, object, or array -- and (for containers) contains only booleans, numbers, strings, objects, and arrays.
