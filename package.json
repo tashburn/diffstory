@@ -1,6 +1,6 @@
 {
   "name": "diffstory",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Javascript lib for producing diffs of data structures and time-traveling with them",
   "keywords": [
     "diff",
