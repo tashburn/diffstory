@@ -1,132 +1,127 @@
-# jsdiff
+# diffstory
 
-A diff library for Javascript structures (objects, arrays, strings, numbers, booleans) that --
-- is light as air
-- is fast as Cheetah
+A diff library for common Javascript structures that --
+- is small
+- is fast
+- handles objects, arrays, strings, numbers, booleans
 - produces small human-readable diffs
 - can use a diff to "time-travel" a structure forward
 - can use a diff to "time-travel" a structure backwards
 - uses a fast "smallest common subsequence" algorithm for string and array diffs
-- for objects, diffs represent additions, removals, and updates
-- for arrays, diffs represent additions, removals, updates (for objects and arrays), and single-member reorderings.
+- for objects, diffs can represent additions, removals, and updates
+- for arrays, diffs can represent additions, removals, and (for elements that are objects or arrays) also updates and single-member reorderings.
 - for strings, the diff is a compact format
 
-It can diff from one structure to another, as long as that structure is a boolean, number, string, object, or array. Containers (objects, arrays) must contain only booleans, numbers, strings, objects, or arrays. Complex, nested, multi-type structures work fine.
+It can diff from one structure to another, provided the structures are (and contain) instances of supported types.
 
-The code is ES6, so you may need something like Babel.
+The intention of this library is to enable a revision history.
 
-## Objects
+## Basic Usage
+
+```
+import diffstory from 'diffstory'
+const o1 = { a:1, b:2 }
+const o2 = { b:20, c:3 }
+diffstory.diff(o1,o2) // returns { add:{c:3}, remove:{a:1}, update:{b:{old:2,new:20}} }
+```
+
+## Diffing Objects
 
 Additions
 ```
-import jsdiff from 'jsdiff
-a = { k1:1 }
-b = { k1:1, k2:2 }
-const diff = jsdiff.diff(a,b)
-// diff is { add:{k2:2} }
+diffstory.diff(
+  { a:1 },
+  { a:1, b:2 }
+) // returns { add:{b:2} }
 ```
 
 Removals
 ```
-import jsdiff from 'jsdiff
 a = { k1:1, k2:2 }
 b = { k1:1 }
-const diff = jsdiff.diff(a,b)
-// diff is { remove:{k2:2} }
+diffstory.diff(a,b)
+// returns { remove:{k2:2} }
 ```
 
 Updates
 ```
-import jsdiff from 'jsdiff
 a = { k1:1 }
 b = { k1:2 }
-const diff = jsdiff.diff(a,b)
-// diff is { update{k1:2} }
+diffstory.diff(a,b)
+// returns { update{k1:2} }
 ```
 
-## Arrays
+## Diffing Arrays
 
 Additions
 ```
-import jsdiff from 'jsdiff
 a = [1]
 b = [1,2]
-const diff = jsdiff.diff(a,b)
-// diff is [ {skip:1}, {add:[2]} ]
+diffstory.diff(a,b)
+// returns [ {skip:1}, {add:[2]} ]
 ```
 
 Removals
 ```
-import jsdiff from 'jsdiff
 a = [1,2]
 b = [1]
-const diff = jsdiff.diff(a,b)
-// diff is [ {skip:1}, {remove:[2]} ]
+diffstory.diff(a,b)
+// returns [ {skip:1}, {remove:[2]} ]
 ```
 
 Updates
 ```
-import jsdiff from 'jsdiff
 a = [{k:1}]
 b = [{k:2}]
-const diff = jsdiff.diff(a,b)
-// diff is [{update:{k:{old:1,new:2}}}]
+diffstory.diff(a,b)
+// returns [{update:{k:{old:1,new:2}}}]
 ```
 
 Single-Member Reorderings
 ```
-import jsdiff from 'jsdiff
 a = [1,2,{k:1}]
 b = [{k:1},1,2]
-const diff = jsdiff.diff(a,b)
-// diff is [{paste1:1},{skip:2},{cut1:1}]
+diffstory.diff(a,b)
+// returns [{paste1:1},{skip:2},{cut1:1}]
 ```
 
-## Strings
+## Diffing Strings
 
 For strings, diffs use "longest common subsequence" diffing in a compact format.
 
 Additions
 ```
-import jsdiff from 'jsdiff
 a = "a"
 b = "ab"
-const diff = jsdiff.diff(a,b)
-// diff is '^1+"b"' (^ means `skip`, + means `add`)
+diffstory.diff(a,b)
+// returns '^1+"b"' (^ means `skip`, + means `add`)
 ```
 
 Removals
 ```
-import jsdiff from 'jsdiff
 a = "ab"
 b = "a"
-const diff = jsdiff.diff(a,b)
-// diff is '^1-"b"' (^ means `skip`, - means `remove`)
+diffstory.diff(a,b)
+// returns '^1-"b"' (^ means `skip`, - means `remove`)
 ```
 
-## Combinations
-
-Complex nested objects are handled too.
-
-## Applying a diff
+## Applying Diffs
 
 Forward
 ```
-import jsdiff from 'jsdiff
 a = "ab"
 b = "a"
-const diff = jsdiff.diff(a,b)
-bb = jsdiff.forward(a,diff)
+diffstory.diff(a,b)
+bb = diffstory.forward(a,diff)
 // b === bb
 ```
 
 Backward
 ```
-import jsdiff from 'jsdiff
 a = "ab"
 b = "a"
-const diff = jsdiff.diff(a,b)
-a = jsdiff.backward(a,diff)
+diffstory.diff(a,b)
+a = diffstory.backward(a,diff)
 // a === aa
 ```
 
