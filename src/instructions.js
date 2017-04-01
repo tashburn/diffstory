@@ -1,4 +1,4 @@
-export const 
+const 
   ADD = 'add',
   REMOVE = 'remove',
   NEW = 'new',
@@ -8,4 +8,4 @@ export const
   CUT = 'cut',
   PASTE = 'paste'
 
-export default { ADD, REMOVE, NEW, OLD, UPDATE, SKIP, CUT, PASTE }
+module.exports = { ADD, REMOVE, NEW, OLD, UPDATE, SKIP, CUT, PASTE }

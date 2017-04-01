@@ -3,7 +3,7 @@ const { isCharNumber } = require('./util/identify')
 const StringStream = require('./util/StringStream')
 
 
-export function diffStrings(s1, s2) {
+function diffStrings(s1, s2) {
 
   // find LCS
   const info = longestCommonSubstring(s1, s2)
@@ -41,7 +41,7 @@ export function diffStrings(s1, s2) {
 }
 
 
-export function stringDiffToOperations(diff) {
+function stringDiffToOperations(diff) {
   const parts = []
   let ix = 0
   const stream = new StringStream(diff)
@@ -76,7 +76,7 @@ export function stringDiffToOperations(diff) {
 }
 
 
-export function forwardString(text, diff) {
+function forwardString(text, diff) {
   const parts = []
   let ix = 0
   stringDiffToOperations(diff).forEach(part => {
@@ -99,7 +99,7 @@ export function forwardString(text, diff) {
 }
 
 
-export function backwardString(text, diff) {
+function backwardString(text, diff) {
   const parts = []
   let ix = 0
   stringDiffToOperations(diff).forEach(part => {
@@ -122,7 +122,7 @@ export function backwardString(text, diff) {
 }
 
 
-export default {
+module.exports = {
   diffStrings, 
   stringDiffToOperations, 
   forwardString, 

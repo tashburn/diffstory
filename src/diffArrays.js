@@ -8,7 +8,7 @@ const diffObjects = require('./diffObjects')
 const { isObject, isArray, isDefined } = require('./util/identify')
 const { ADD, REMOVE, SKIP, CUT, PASTE } = require('./instructions')
 
-export function diffArrays(arr1, arr2) {
+function diffArrays(arr1, arr2) {
 
   // find LCS
   const info = longestCommonSubsequence(arr1, arr2)
@@ -100,7 +100,7 @@ export function diffArrays(arr1, arr2) {
 }
 
 
-export function forwardArray(thing, diff) {
+function forwardArray(thing, diff) {
 
   // collect the cuts first
   let ix = 0
@@ -180,7 +180,7 @@ export function forwardArray(thing, diff) {
 }
 
 
-export function backwardArray(thing, diff) {
+function backwardArray(thing, diff) {
   // collect the pastes first
   let ix = 0
   const pastes = {}
@@ -260,4 +260,4 @@ export function backwardArray(thing, diff) {
 }
 
 
-export default { diffArrays, forwardArray, backwardArray }
+module.exports = { diffArrays, forwardArray, backwardArray }

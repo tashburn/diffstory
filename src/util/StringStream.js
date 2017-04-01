@@ -1,5 +1,5 @@
 
-export default class StringStream {
+module.exports = class StringStream {
   
   constructor(string) {
     this.string = string

@@ -2,7 +2,7 @@
 const isEqual = require('lodash/isEqual')
 
 
-export function longestCommonSubstring(str1, str2){
+function longestCommonSubstring(str1, str2){
 
   if (!str1 || !str2)
     return {
@@ -56,7 +56,7 @@ export function longestCommonSubstring(str1, str2){
 }
 
 
-export function longestCommonSubsequence(arr1, arr2){
+function longestCommonSubsequence(arr1, arr2){
 
   if (!arr1 || !arr2) return { offset1: 0, offset2: 0, length: 0 }
  
@@ -107,4 +107,4 @@ export function longestCommonSubsequence(arr1, arr2){
 }
 
 
-export default { longestCommonSubstring, longestCommonSubsequence }
+module.exports = { longestCommonSubstring, longestCommonSubsequence }

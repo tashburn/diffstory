@@ -10,7 +10,7 @@ const { ADD, REMOVE, UPDATE, OLD, NEW } = require('./instructions')
 const { isString } = require('./util/identify')
 
 
-export function diffObjects(object1, object2) {
+function diffObjects(object1, object2) {
   const diff = {}
 
   const keys1 = keys(object1)
@@ -44,7 +44,7 @@ export function diffObjects(object1, object2) {
 }
 
 
-export function forwardObject(thing, diff) {
+function forwardObject(thing, diff) {
   const ret = cloneDeep(thing)
   
   const add = diff[ADD]
@@ -75,7 +75,7 @@ export function forwardObject(thing, diff) {
 }
 
 
-export function backwardObject(thing, diff) {
+function backwardObject(thing, diff) {
 
   const ret = cloneDeep(thing)
   
@@ -107,4 +107,4 @@ export function backwardObject(thing, diff) {
 }
 
 
-export default { diffObjects, forwardObject, backwardObject }
+module.exports = { diffObjects, forwardObject, backwardObject }

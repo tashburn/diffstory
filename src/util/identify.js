@@ -1,24 +1,26 @@
 
-export function isObject(o) { return typeof o === 'object' && !isArray(o) } 
+const exports = module.exports = {}
 
-export function isArray(o) { return o.constructor === Array }
+exports.isObject = (o) => { return typeof o === 'object' && !isArray(o) } 
 
-export function isFunction(o) { return typeof o === 'function' }
+exports.isArray = (o) => { return o.constructor === Array }
 
-export function isBoolean(o) { return typeof o === 'boolean' }
+exports.isFunction = (o) => { return typeof o === 'function' }
 
-export function isNumber(o) { return typeof o === 'number' }
+exports.isBoolean = (o) => { return typeof o === 'boolean' }
 
-export function isString(o) { return typeof o === 'string' }
+exports.isNumber = (o) => { return typeof o === 'number' }
 
-export function isSymbol(o) { return typeof o === 'symbol' }
+exports.isString = (o) => { return typeof o === 'string' }
 
-export function isNull(o) { return o === null }
+exports.isSymbol = (o) => { return typeof o === 'symbol' }
 
-export function isDefined(o) { return typeof o !== 'undefined' }
+exports.isNull = (o) => { return o === null }
 
-export function isUndefined(o) { return typeof o === 'undefined' }
+exports.isDefined = (o) => { return typeof o !== 'undefined' }
 
-export function exists(o) { return isDefined(o) && !isNull(o) }
+exports.isUndefined = (o) => { return typeof o === 'undefined' }
 
-export function isCharNumber(ch) { return isString(ch) && ch.length==1 && /([0-9])/.test(ch) }
+exports.exists = (o) => { return isDefined(o) && !isNull(o) }
+
+exports.isCharNumber = (ch) => { return isString(ch) && ch.length==1 && /([0-9])/.test(ch) }

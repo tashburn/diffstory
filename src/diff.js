@@ -9,7 +9,7 @@ const { diffArrays, forwardArray, backwardArray } = require('./diffArrays')
 const { diffStrings, forwardString, backwardString, stringDiffToOperations } = require('./diffStrings')
 
 
-export function diff(thing1, thing2) {
+function diff(thing1, thing2) {
   // optimized case: objects (add,remove,update)
   if (isObject(thing1) && isObject(thing2)) {
     return diffObjects(thing1, thing2)
@@ -32,7 +32,7 @@ export function diff(thing1, thing2) {
 }
 
 
-export function forward(thing, diff) {
+function forward(thing, diff) {
   if (isBoolean(thing)) {
     return diff.new
   }
@@ -52,7 +52,7 @@ export function forward(thing, diff) {
 }
 
 
-export function backward(thing, diff) {
+function backward(thing, diff) {
   if (isBoolean(thing)) {
     return diff.old
   }
@@ -72,7 +72,7 @@ export function backward(thing, diff) {
 }
 
 
-export default { 
+module.exports = { 
   diff, 
   forward, 
   backward, 
