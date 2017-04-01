@@ -11,6 +11,8 @@ A diff library for Javascript objects that's --
 - for arrays, can handle additions, removals, updates (for objects and arrays), and single-member reorderings.
 - for strings, the diff is a compact format
 
+Can diff from one structure to another, as long as that structure is a boolean, number, string, object, or array -- and (for containers) contains only booleans, numbers, strings, objects, and arrays.
+
 The examples below assume ES6.
 
 ## Objects
