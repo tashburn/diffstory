@@ -3,10 +3,10 @@
 A diff library to assist in managing revision histories of common Javascript data structures.
 
 - It's small and fast with minimal dependencies
-- Handles objects, arrays, strings, numbers, booleans (the "supported types")
+- Handles objects, arrays, strings, numbers, booleans
 - Can diff from one structure to the other, even if different types
 - Produces small human-readable diffs
-- Diffs are composed of basic Javascript structures that are easily serializable
+- Diffs are composed of basic non-cyclic Javascript structures that are easily serializable and storable
 - Can use a diff to "time-travel" a structure forward
 - Can use a diff to "time-travel" a structure backwards
 - Uses a fast "smallest common subsequence" algorithm for nice diffs of strings and arrays
@@ -30,9 +30,9 @@ const obj2 = { b:20, c:3 }
 const diff = diffstory.diff(obj1, obj2) 
 
 // diff is { 
-//   add:{c:3}, 
-//   remove:{a:1}, 
-//   update:{b:{old:2,new:20}}
+//   add: {c:3}, 
+//   remove: {a:1}, 
+//   update: {b:{old:2,new:20}}
 // }
 ```
 
@@ -91,7 +91,7 @@ const a = [{k:1}]
 const b = [{k:2}]
 const d = diffstory.diff(a,b)
 
-// d is [{update:{k:{old:1,new:2}}}]
+// d is [ {update:{k:{old:1,new:2}}} ]
 ```
 
 Single-Member Reorderings
@@ -109,7 +109,7 @@ For strings, a "longest common subsequence" algorithm is used to produce diffs i
 
 Additions
 ```
-const d = diffstory.diff('a','ab')
+const d = diffstory.diff('-"a"^1+"c"')
 
 // d is '^1+"b"' (^ means `skip`, + means `add`)
 ```
