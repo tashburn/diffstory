@@ -11,6 +11,8 @@ A diff library for Javascript objects that's --
 - for arrays, can handle additions, removals, updates (for objects and arrays), and single-member reorderings.
 - for strings, the diff is a compact format
 
+The examples below assume ES6.
+
 ## Objects
 
 Additions
@@ -69,7 +71,7 @@ const diff = jsdiff.diff(a,b)
 // diff is [{update:{k:{old:1,new:2}}}]
 ```
 
-Single-member Reorderings
+Single-Member Reorderings
 ```
 import jsdiff from 'jsdiff
 a = [1,2,{k:1}]
@@ -103,6 +105,28 @@ const diff = jsdiff.diff(a,b)
 ## Combinations
 
 Complex nested objects are handled too.
+
+## Applying a diff
+
+Forward
+```
+import jsdiff from 'jsdiff
+a = "ab"
+b = "a"
+const diff = jsdiff.diff(a,b)
+bb = jsdiff.forward(a,diff)
+// b === bb
+```
+
+Backward
+```
+import jsdiff from 'jsdiff
+a = "ab"
+b = "a"
+const diff = jsdiff.diff(a,b)
+a = jsdiff.backward(a,diff)
+// a === aa
+```
 
 ## Future work
 
