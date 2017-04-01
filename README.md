@@ -11,7 +11,7 @@ A diff library for Javascript structures (objects, arrays, strings, numbers, boo
 - for arrays, diffs represent additions, removals, updates (for objects and arrays), and single-member reorderings.
 - for strings, the diff is a compact format
 
-It can diff from one structure to another, as long as that structure is a boolean, number, string, object, or array. Containers (objects, arrays) must contains only booleans, numbers, strings, objects, and arrays.
+It can diff from one structure to another, as long as that structure is a boolean, number, string, object, or array. Containers (objects, arrays) must contain only booleans, numbers, strings, objects, or arrays. Complex, nested, multi-type structures work fine.
 
 The code is ES6, so you may need something like Babel.
 
@@ -132,5 +132,5 @@ a = jsdiff.backward(a,diff)
 
 ## Future work
 
-- Compact multiple-member reorderings (currently compacts just single-member reorders)
-- Compact handling of array member duplication (currently just treated as additions)
+- Compact diffs of multiple-member reorderings when the members are objects or arrays (currently handles just single-member reorderings)
+- Compact handling of array member duplication when the members are objects or arrays (currently treated as additions)

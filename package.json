@@ -1,0 +1,32 @@
+{
+  "name": "diffstory",
+  "version": "0.1.0",
+  "description": "Javascript lib for producing diffs of data structures and time-traveling with them",
+  "keywords": [
+    "diff",
+    "javascript"
+  ],
+  "maintainers": [
+    "tashburn"
+  ],
+  "bugs": {
+    "url": "http://github.com/tashburn/jsdiff/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tashburn/diffstory.git"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "babel-preset-es2015": "6.24.0",
+    "lodash": "4.17.4"
+  },
+  "devDependencies": {
+    "babel-jest": "19.0.0",
+    "jest": "19.0.2"
+  }
+}
