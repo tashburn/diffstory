@@ -1,4 +1,5 @@
-import isEqual from 'lodash/isEqual'
+// import isEqual from 'lodash/isEqual'
+const isEqual = require('lodash/isEqual')
 
 
 export function longestCommonSubstring(str1, str2){

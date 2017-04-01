@@ -1,12 +1,12 @@
-import isEqual from 'lodash/isEqual'
-import intersection from 'lodash/intersection'
-import keys from 'lodash/keys'
-import concat from 'lodash/concat'
+const isEqual = require('lodash/isEqual')
+const intersection = require('lodash/intersection')
+const keys = require('lodash/keys')
+const concat = require('lodash/concat')
 
-import { longestCommonSubsequence } from './util/lcs'
-import diffObjects from './diffObjects'
-import { isObject, isArray, isDefined } from './util/identify'
-import { ADD, REMOVE, SKIP, CUT, PASTE } from './instructions'
+const { longestCommonSubsequence } = require('./util/lcs')
+const diffObjects = require('./diffObjects')
+const { isObject, isArray, isDefined } = require('./util/identify')
+const { ADD, REMOVE, SKIP, CUT, PASTE } = require('./instructions')
 
 export function diffArrays(arr1, arr2) {
 

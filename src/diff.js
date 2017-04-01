@@ -1,12 +1,12 @@
-import concat from 'lodash/concat'
-import keys from 'lodash/keys'
-import cloneDeep from 'lodash/cloneDeep'
+const concat = require('lodash/concat')
+const keys = require('lodash/keys')
+const cloneDeep = require('lodash/cloneDeep')
 
-import { isBoolean, isNumber, isString, isObject, isArray } from './util/identify'
-import { ADD, REMOVE, UPDATE, CUT, PASTE, NEW, OLD, SKIP } from './instructions'
-import { diffObjects, forwardObject, backwardObject } from './diffObjects'
-import { diffArrays, forwardArray, backwardArray } from './diffArrays'
-import { diffStrings, forwardString, backwardString, stringDiffToOperations } from './diffStrings'
+const { isBoolean, isNumber, isString, isObject, isArray } = require('./util/identify')
+const { ADD, REMOVE, UPDATE, CUT, PASTE, NEW, OLD, SKIP } = require('./instructions')
+const { diffObjects, forwardObject, backwardObject } = require('./diffObjects')
+const { diffArrays, forwardArray, backwardArray } = require('./diffArrays')
+const { diffStrings, forwardString, backwardString, stringDiffToOperations } = require('./diffStrings')
 
 
 export function diff(thing1, thing2) {

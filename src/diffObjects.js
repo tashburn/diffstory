@@ -1,13 +1,13 @@
-import difference from 'lodash/difference'
-import intersection from 'lodash/intersection'
-import keys from 'lodash/keys'
-import cloneDeep from 'lodash/cloneDeep'
-import isEmpty from 'lodash/isEmpty'
-import isEqual from 'lodash/isEqual'
+const difference = require('lodash/difference')
+const intersection = require('lodash/intersection')
+const keys = require('lodash/keys')
+const cloneDeep = require('lodash/cloneDeep')
+const isEmpty = require('lodash/isEmpty')
+const isEqual = require('lodash/isEqual')
 
-import { diff as computeDiff } from './diff'
-import { ADD, REMOVE, UPDATE, OLD, NEW } from './instructions'
-import { isString } from './util/identify'
+const { diff as computeDiff } = require('./diff')
+const { ADD, REMOVE, UPDATE, OLD, NEW } = require('./instructions')
+const { isString } = require('./util/identify')
 
 
 export function diffObjects(object1, object2) {

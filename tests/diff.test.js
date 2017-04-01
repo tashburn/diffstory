@@ -1,4 +1,4 @@
-import diffstory from '../src/diff'
+const diffstory = require('../src/diff')
 
 test('booleans', () => {
   run(

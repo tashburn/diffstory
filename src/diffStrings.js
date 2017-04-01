@@ -1,6 +1,6 @@
-import { longestCommonSubstring } from './util/lcs'
-import { isCharNumber } from './util/identify'
-import StringStream from './util/StringStream'
+const { longestCommonSubstring } = require('./util/lcs')
+const { isCharNumber } = require('./util/identify')
+const StringStream = require('./util/StringStream')
 
 
 export function diffStrings(s1, s2) {
