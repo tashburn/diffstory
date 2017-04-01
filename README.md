@@ -1,11 +1,11 @@
 # jsdiff
 
 A diff library for Javascript objects that's --
-- small
-- fast
+- light as air
+- fast as Cheetah
 - produces small human-readable diffs
-- can apply a diff forwards
-- can apply a diff backwards
+- can time-travel forwards
+- can time-travel backwards
 - uses a fast "smallest common subsequence" algorithm for string and array diffs
 - for objects, diffs represent additions, removals, and updates
 - for arrays, diffs represent additions, removals, updates (for objects and arrays), and single-member reorderings.
@@ -13,7 +13,7 @@ A diff library for Javascript objects that's --
 
 Can diff from one structure to another, as long as that structure is a boolean, number, string, object, or array -- and (for containers) contains only booleans, numbers, strings, objects, and arrays.
 
-The examples below assume ES6.
+The code is ES6, so you may need something like Babel.
 
 ## Objects
 
