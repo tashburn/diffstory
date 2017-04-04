@@ -1,6 +1,7 @@
 const concat = require('lodash/concat')
 const keys = require('lodash/keys')
 const cloneDeep = require('lodash/cloneDeep')
+const isEqual = require('lodash/isEqual')
 
 const { isBoolean, isNumber, isString, isObject, isArray } = require('./util/identify')
 const { ADD, REMOVE, UPDATE, CUT, PASTE, NEW, OLD, SKIP } = require('./instructions')
@@ -72,9 +73,17 @@ function backward(thing, diff) {
 }
 
 
+function verify(oldThing, newThing, diff) {
+  const oldThing2 = backward(newTopic, diff)
+  const newThing2 = forward(oldTopic, diff)
+  return isEqual(oldThing, oldThing2) && isEqual(newThing, newThing2)
+}
+
+
 module.exports = { 
   diff, 
   forward, 
   backward, 
-  stringDiffToOperations 
+  stringDiffToOperations,
+  verify,
 }
