@@ -156,6 +156,18 @@ a = diffstory.backward(a,d)
 // a === aa
 ```
 
+## Verifying Diffs
+
+To ensure integrity, you can verify that a diff works forwards and backwards.
+```
+const a = "ab"
+const b = "a"
+const d = diffstory.diff(a,b)
+const ok = diffstory.verify(a,b,d)
+
+// ok === true
+```
+
 ## Future work
 
 - Compact diffs of multiple-member reorderings when the members are objects or arrays (currently handles just single-member reorderings)
