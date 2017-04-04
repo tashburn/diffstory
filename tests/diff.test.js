@@ -49,6 +49,14 @@ test('arrays', () => {
   )
 })
 
+test('verify', () => {
+  const a = 'ab'  
+  const b = 'bc'
+  const d = diffstory.diff(a,b)
+  const v = diffstory.verify(a,b,d)
+  expect(v).toEqual(true)
+})
+
 // Utils
 
 function run(fromStructure, toStructure, expectedDiff) {

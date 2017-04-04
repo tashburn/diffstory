@@ -5,12 +5,13 @@ const cloneDeep = require('lodash/cloneDeep')
 const isEmpty = require('lodash/isEmpty')
 const isEqual = require('lodash/isEqual')
 
-const computeDiff = require('./diff').diff
+const diffstory = require('./diff')
 const { ADD, REMOVE, UPDATE, OLD, NEW } = require('./instructions')
 const { isString } = require('./util/identify')
 
 
 function diffObjects(object1, object2) {
+
   const diff = {}
 
   const keys1 = keys(object1)
@@ -35,7 +36,7 @@ function diffObjects(object1, object2) {
     const v1 = object1[k]
     const v2 = object2[k]
     if (!isEqual(v1,v2))
-      updated[k] = computeDiff(v1,v2)
+      updated[k] = diffstory.diff(v1,v2)
   })
   if (!isEmpty(updated)) 
     diff[UPDATE] = updated

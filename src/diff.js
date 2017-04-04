@@ -74,16 +74,15 @@ function backward(thing, diff) {
 
 
 function verify(oldThing, newThing, diff) {
-  const oldThing2 = backward(newTopic, diff)
-  const newThing2 = forward(oldTopic, diff)
+  const oldThing2 = backward(newThing, diff)
+  const newThing2 = forward(oldThing, diff)
   return isEqual(oldThing, oldThing2) && isEqual(newThing, newThing2)
 }
 
 
-module.exports = { 
-  diff, 
-  forward, 
-  backward, 
-  stringDiffToOperations,
-  verify,
-}
+// doing exports this way allows circular dependency
+module.exports.diff = diff
+module.exports.forward = forward
+module.exports.backward = backward
+module.exports.stringDiffToOperations = stringDiffToOperations
+module.exports.verify = verify
