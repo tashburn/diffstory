@@ -108,4 +108,6 @@ function backwardObject(thing, diff) {
 }
 
 
-module.exports = { diffObjects, forwardObject, backwardObject }
+module.exports.diffObjects = diffObjects
+module.exports.forwardObject = forwardObject
+module.exports.backwardObject = backwardObject

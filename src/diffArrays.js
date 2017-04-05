@@ -4,9 +4,10 @@ const keys = require('lodash/keys')
 const concat = require('lodash/concat')
 
 const { longestCommonSubsequence } = require('./util/lcs')
-const diffObjects = require('./diffObjects')
+const { diffObjects } = require('./diffObjects')
 const { isObject, isArray, isDefined } = require('./util/identify')
 const { ADD, REMOVE, SKIP, CUT, PASTE } = require('./instructions')
+
 
 function diffArrays(arr1, arr2) {
 
@@ -260,4 +261,6 @@ function backwardArray(thing, diff) {
 }
 
 
-module.exports = { diffArrays, forwardArray, backwardArray }
+module.exports.diffArrays = diffArrays
+module.exports.forwardArray = forwardArray
+module.exports.backwardArray = backwardArray
