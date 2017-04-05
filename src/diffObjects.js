@@ -62,13 +62,13 @@ function forwardObject(thing, diff) {
   for (let key in update || {}) {
     const udiff = update[key]
     if (isString(udiff)) {
-      ret[key] = forward(ret[key], udiff)
+      ret[key] = diffstory.forward(ret[key], udiff)
     }
     else if (OLD in udiff) {
       ret[key] = udiff[NEW]
     }
     else {
-      ret[key] = forward(ret[key], udiff)
+      ret[key] = diffstory.forward(ret[key], udiff)
     }
   }
 
@@ -94,13 +94,13 @@ function backwardObject(thing, diff) {
   for (let key in update || {}) {
     const udiff = update[key]
     if (isString(udiff)) {
-      ret[key] = backward(ret[key], udiff)
+      ret[key] = diffstory.backward(ret[key], udiff)
     }
     else if (OLD in udiff) {
       ret[key] = udiff[OLD]
     }
     else {
-      ret[key] = backward(ret[key], udiff)
+      ret[key] = diffstory.backward(ret[key], udiff)
     }
   }
 

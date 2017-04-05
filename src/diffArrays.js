@@ -4,6 +4,7 @@ const keys = require('lodash/keys')
 const concat = require('lodash/concat')
 
 const { longestCommonSubsequence } = require('./util/lcs')
+const diffstory = require('./diff')
 const { diffObjects } = require('./diffObjects')
 const { isObject, isArray, isDefined } = require('./util/identify')
 const { ADD, REMOVE, SKIP, CUT, PASTE } = require('./instructions')
@@ -154,7 +155,7 @@ function forwardArray(thing, diff) {
       ix += part[REMOVE].length
     }
     else if (UPDATE in part) {
-      const member = forward(thing[ix], part)
+      const member = diffstory.forward(thing[ix], part)
       ret.push(member)
       ix += 1
     }
@@ -233,7 +234,7 @@ function backwardArray(thing, diff) {
       ret = concat(ret, part[REMOVE])
     }
     else if (UPDATE in part) {
-      const member = backward(thing[ix], part)
+      const member = diffstory.backward(thing[ix], part)
       ret.push(member)
       ix += 1
     }
