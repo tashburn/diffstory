@@ -6,7 +6,7 @@ const isEmpty = require('lodash/isEmpty')
 const isEqual = require('lodash/isEqual')
 
 const diffstory = require('./diff')
-const { ADD, REMOVE, UPDATE, OLD, NEW } = require('./instructions')
+const { ADD, REMOVE, UPDATE, CUT, PASTE, NEW, OLD, SKIP } = require('./instructions')
 const { isString } = require('./util/identify')
 
 

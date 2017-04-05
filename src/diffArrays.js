@@ -7,7 +7,7 @@ const { longestCommonSubsequence } = require('./util/lcs')
 const diffstory = require('./diff')
 const { diffObjects } = require('./diffObjects')
 const { isObject, isArray, isDefined } = require('./util/identify')
-const { ADD, REMOVE, SKIP, CUT, PASTE } = require('./instructions')
+const { ADD, REMOVE, UPDATE, CUT, PASTE, NEW, OLD, SKIP } = require('./instructions')
 
 
 function diffArrays(arr1, arr2) {
