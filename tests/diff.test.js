@@ -6,6 +6,7 @@ const {
   ADD_PROP, 
   REMOVE_PROP, 
   UPDATE_PROP, 
+  KEEP_PROP,
 
   ADD_ITEM, 
   REMOVE_ITEM, 
@@ -13,6 +14,7 @@ const {
   CUT_ITEM, 
   PASTE_ITEM, 
   SKIP_ITEM,
+  KEEP_ITEM,
 
 } = require('../src/instructions')
 
@@ -41,14 +43,14 @@ test('strings', () => {
   )
 })
 
-test('stringDiffToOperations', () => {
-  const ops = diffstory.stringDiffToOperations('-"a"^"b"+"c"')
-  expect(ops).toEqual([
-    {'-':'a'},
-    {'^':'b'},
-    {'+':'c'},
-  ])
-})
+// test('stringDiffToOperations', () => {
+//   const ops = diffstory.stringDiffToOperations('-"a"^"b"+"c"')
+//   expect(ops).toEqual([
+//     {'-':'a'},
+//     {'^':'b'},
+//     {'+':'c'},
+//   ])
+// })
 
 test('objects', () => {
   run(
@@ -62,7 +64,16 @@ test('array objects', () => {
   run(
     { items:[{name:'joe'}] },
     { items:[{name:'joe',age:32}] },
-    { [UPDATE_PROP]: { items:[{[ADD_PROP]:{age:32}}] } }
+    { [UPDATE_PROP]: { 
+      items: [
+        {
+          [UPDATE_ITEM]: {
+            [ADD_PROP]: {age:32}
+          } 
+        }
+      ]
+      }
+    }
   )
 })
 
@@ -72,6 +83,35 @@ test('arrays', () => {
     [ 2,3 ],
     [ {[REMOVE_ITEM]:[1]}, {[SKIP_ITEM]:1}, {[ADD_ITEM]:[3]} ]
   )
+})
+
+test('string operations', () => {
+  const ops = diffstory.operations('ab','bc')
+  expect(ops).toEqual([
+    {'-':'a'},
+    {'&':'b'},
+    {'+':'c'},
+  ])
+})
+test('object operations', () => {
+  const a = { a:1, b:2 }
+  const b = { b:2, c:3 }
+  const ops = diffstory.operations(a,b)
+  expect(ops).toEqual({
+    [REMOVE_PROP]: { a: 1 },
+    [KEEP_PROP]: { b: 2 },
+    [ADD_PROP]: { c: 3 },
+  })
+})
+test('array operations', () => {
+  const a = [ 1,2 ]
+  const b = [ 2,3 ]
+  const ops = diffstory.operations(a,b)
+  expect(ops).toEqual([
+    { [REMOVE_ITEM]: [1] },
+    { [KEEP_ITEM]: [2] },
+    { [ADD_ITEM]: [3] },
+  ])
 })
 
 test('verify', () => {

@@ -8,6 +8,7 @@ const { NEW_VALUE, OLD_VALUE } = require('./instructions')
 const { diffObjects, forwardObject, backwardObject } = require('./diffObjects')
 const { diffArrays, forwardArray, backwardArray } = require('./diffArrays')
 const { diffStrings, forwardString, backwardString, stringDiffToOperations } = require('./diffStrings')
+const { operations } = require('./operations')
 
 
 function diff(thing1, thing2) {
@@ -84,5 +85,10 @@ function verify(oldThing, newThing, diff) {
 module.exports.diff = diff
 module.exports.forward = forward
 module.exports.backward = backward
-module.exports.stringDiffToOperations = stringDiffToOperations
+
+// module.exports.stringDiffToOperations = stringDiffToOperations
+module.exports.operations = operations
+// module.exports.operationsFromForwardDiff = operationsFromForwardDiff
+// module.exports.operationsFromBackwardDiff = operationsFromBackwardDiff
+
 module.exports.verify = verify

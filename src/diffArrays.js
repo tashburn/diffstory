@@ -65,7 +65,7 @@ function diffArrays(arr1, arr2) {
         // both objects?
         if (isObject(val1) && isObject(val2)) {
           if (intersection(keys(val1),keys(val2)).length > 0) {
-            ret[i1] = diffObjects(val1, val2)
+            ret[i1] = { [UPDATE_ITEM]: diffObjects(val1, val2) }
             ret.splice(i2, 1) // remove at index i2
           }
         }
@@ -154,8 +154,8 @@ function forwardArray(thing, diff) {
     else if (REMOVE_ITEM in part) {
       ix += part[REMOVE_ITEM].length
     }
-    else if (UPDATE_ITEM in part || ADD_PROP in part || REMOVE_PROP in part || UPDATE_PROP in part) {
-      const member = diffstory.forward(thing[ix], part)
+    else if (UPDATE_ITEM in part) {
+      const member = diffstory.forward(thing[ix], part[UPDATE_ITEM])
       ret.push(member)
       ix += 1
     }
@@ -236,8 +236,8 @@ function backwardArray(thing, diff) {
     else if (REMOVE_ITEM in part) {
       ret = concat(ret, part[REMOVE_ITEM])
     }
-    else if (UPDATE_ITEM in part || ADD_PROP in part || REMOVE_PROP in part || UPDATE_PROP in part) {
-      const member = diffstory.backward(thing[ix], part)
+    else if (UPDATE_ITEM in part) {
+      const member = diffstory.backward(thing[ix], part[UPDATE_ITEM])
       ret.push(member)
       ix += 1
     }
