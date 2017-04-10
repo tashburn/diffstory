@@ -4,11 +4,13 @@ const cloneDeep = require('lodash/cloneDeep')
 const isEqual = require('lodash/isEqual')
 
 const { isBoolean, isNumber, isString, isObject, isArray } = require('./util/identify')
-const { NEW_VALUE, OLD_VALUE } = require('./instructions')
+const instructions = require('./instructions')
 const { diffObjects, forwardObject, backwardObject } = require('./diffObjects')
 const { diffArrays, forwardArray, backwardArray } = require('./diffArrays')
 const { diffStrings, forwardString, backwardString, stringDiffToOperations } = require('./diffStrings')
 const { operations } = require('./operations')
+
+const { NEW_VALUE, OLD_VALUE } = instructions
 
 
 function diff(thing1, thing2) {
@@ -82,6 +84,9 @@ function verify(oldThing, newThing, diff) {
 
 
 // doing exports this way allows circular dependency
+
+module.exports.instructions = instructions
+
 module.exports.diff = diff
 module.exports.forward = forward
 module.exports.backward = backward
