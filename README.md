@@ -10,8 +10,7 @@ A diff library to assist in managing revision histories of common Javascript dat
 - Can use a diff to "time-travel" a structure forward
 - Can use a diff to "time-travel" a structure backwards
 - Uses a fast "smallest common subsequence" algorithm for nice diffs of strings and arrays
-- For objects, diffs can represent additions, removals, and updates
-- For arrays, diffs can represent additions, removals, and also (for elements that are objects or arrays) updates and single-member reorderings.
+- For objects and arrays, diffs can represent additions, removals, and updates
 - For strings, the diff is a compact string-based format, which can be converted to a processable "list of operations"
 
 ## Installation
@@ -92,15 +91,6 @@ const b = [{k:2}]
 const d = diffstory.diff(a,b)
 
 // d is [ {update:{k:{old:1,new:2}}} ]
-```
-
-Single-Member Reorderings
-```
-const a = [1,2,{k:1}]
-const b = [{k:1},1,2]
-const d = diffstory.diff(a,b)
-
-// d is [ {paste1:1}, {skip:2}, {cut1:1} ]
 ```
 
 ## Diffing Strings
