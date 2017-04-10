@@ -4,7 +4,7 @@ const cloneDeep = require('lodash/cloneDeep')
 const isEqual = require('lodash/isEqual')
 
 const { isBoolean, isNumber, isString, isObject, isArray } = require('./util/identify')
-const { ADD, REMOVE, UPDATE, CUT, PASTE, NEW, OLD, SKIP } = require('./instructions')
+const { NEW_VALUE, OLD_VALUE } = require('./instructions')
 const { diffObjects, forwardObject, backwardObject } = require('./diffObjects')
 const { diffArrays, forwardArray, backwardArray } = require('./diffArrays')
 const { diffStrings, forwardString, backwardString, stringDiffToOperations } = require('./diffStrings')
@@ -26,8 +26,8 @@ function diff(thing1, thing2) {
   // typical case (old/new)
   else {
     return {
-      [OLD]: thing1,
-      [NEW]: thing2,
+      [OLD_VALUE]: thing1,
+      [NEW_VALUE]: thing2,
     }
   }
 }
@@ -35,10 +35,10 @@ function diff(thing1, thing2) {
 
 function forward(thing, diff) {
   if (isBoolean(thing)) {
-    return diff.new
+    return diff[NEW_VALUE]
   }
   else if (isNumber(thing)) {
-    return diff.new
+    return diff[NEW_VALUE]
   }
   else if (isString(thing)) {
     return forwardString(thing, diff)
@@ -55,10 +55,10 @@ function forward(thing, diff) {
 
 function backward(thing, diff) {
   if (isBoolean(thing)) {
-    return diff.old
+    return diff[OLD_VALUE]
   }
   else if (isNumber(thing)) {
-    return diff.old
+    return diff[OLD_VALUE]
   }
   else if (isString(thing)) {
     return backwardString(thing, diff)

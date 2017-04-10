@@ -1,10 +1,27 @@
 const diffstory = require('../src/diff')
+const { 
+  OLD_VALUE,
+  NEW_VALUE,
+
+  ADD_PROP, 
+  REMOVE_PROP, 
+  UPDATE_PROP, 
+
+  ADD_ITEM, 
+  REMOVE_ITEM, 
+  UPDATE_ITEM, 
+  CUT_ITEM, 
+  PASTE_ITEM, 
+  SKIP_ITEM,
+
+} = require('../src/instructions')
+
 
 test('booleans', () => {
   run(
     true, 
     false, 
-    { old:true, new:false }
+    { [OLD_VALUE]:true, [NEW_VALUE]:false }
   )
 })
 
@@ -12,7 +29,7 @@ test('numbers', () => {
   run(
     1,
     2,
-    { old:1, new:2 }
+    { [OLD_VALUE]:1, [NEW_VALUE]:2 }
   )
 })
 
@@ -37,7 +54,15 @@ test('objects', () => {
   run(
     { a:1, b:2, c:3 },
     { a:1, b:20, d:4 },
-    { add:{d:4}, remove:{c:3}, update:{b:{old:2,new:20}} }
+    { [ADD_PROP]:{d:4}, [REMOVE_PROP]:{c:3}, [UPDATE_PROP]:{b:{[OLD_VALUE]:2,[NEW_VALUE]:20}} }
+  )
+})
+
+test('array objects', () => {
+  run(
+    { items:[{name:'joe'}] },
+    { items:[{name:'joe',age:32}] },
+    { [UPDATE_PROP]: { items:[{[ADD_PROP]:{age:32}}] } }
   )
 })
 
@@ -45,7 +70,7 @@ test('arrays', () => {
   run(
     [ 1,2 ],
     [ 2,3 ],
-    [ {remove:[1]}, {skip:1}, {add:[3]} ]
+    [ {[REMOVE_ITEM]:[1]}, {[SKIP_ITEM]:1}, {[ADD_ITEM]:[3]} ]
   )
 })
 

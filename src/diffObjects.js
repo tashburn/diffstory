@@ -6,8 +6,8 @@ const isEmpty = require('lodash/isEmpty')
 const isEqual = require('lodash/isEqual')
 
 const diffstory = require('./diff')
-const { ADD, REMOVE, UPDATE, CUT, PASTE, NEW, OLD, SKIP } = require('./instructions')
 const { isString } = require('./util/identify')
+const { ADD_PROP, REMOVE_PROP, UPDATE_PROP, NEW_VALUE, OLD_VALUE } = require('./instructions')
 
 
 function diffObjects(object1, object2) {
@@ -24,12 +24,12 @@ function diffObjects(object1, object2) {
   const added = {}
   keysAdded.forEach(k => { added[k] = object2[k] })
   if (!isEmpty(added)) 
-    diff[ADD] = added
+    diff[ADD_PROP] = added
 
   const removed = {}
   keysRemoved.forEach(k => { removed[k] = object1[k] })
   if (!isEmpty(removed)) 
-    diff[REMOVE] = removed
+    diff[REMOVE_PROP] = removed
 
   const updated = {}
   keysShared.forEach(k => {
@@ -39,7 +39,7 @@ function diffObjects(object1, object2) {
       updated[k] = diffstory.diff(v1,v2)
   })
   if (!isEmpty(updated)) 
-    diff[UPDATE] = updated
+    diff[UPDATE_PROP] = updated
 
   return diff  
 }
@@ -48,24 +48,24 @@ function diffObjects(object1, object2) {
 function forwardObject(thing, diff) {
   const ret = cloneDeep(thing)
   
-  const add = diff[ADD]
+  const add = diff[ADD_PROP]
   for (let key in add || {}) {
     ret[key] = add[key]
   }
 
-  const remove = diff[REMOVE]
+  const remove = diff[REMOVE_PROP]
   for (let key in remove || {}) {
     delete ret[key]
   }
 
-  const update = diff[UPDATE]
+  const update = diff[UPDATE_PROP]
   for (let key in update || {}) {
     const udiff = update[key]
     if (isString(udiff)) {
       ret[key] = diffstory.forward(ret[key], udiff)
     }
-    else if (OLD in udiff) {
-      ret[key] = udiff[NEW]
+    else if (OLD_VALUE in udiff) {
+      ret[key] = udiff[NEW_VALUE]
     }
     else {
       ret[key] = diffstory.forward(ret[key], udiff)
@@ -80,24 +80,24 @@ function backwardObject(thing, diff) {
 
   const ret = cloneDeep(thing)
   
-  const add = diff[ADD]
+  const add = diff[ADD_PROP]
   for (let key in add || {}) {
     delete ret[key]
   }
 
-  const remove = diff[REMOVE]
+  const remove = diff[REMOVE_PROP]
   for (let key in remove || {}) {
     ret[key] = remove[key]
   }
 
-  const update = diff[UPDATE]
+  const update = diff[UPDATE_PROP]
   for (let key in update || {}) {
     const udiff = update[key]
     if (isString(udiff)) {
       ret[key] = diffstory.backward(ret[key], udiff)
     }
-    else if (OLD in udiff) {
-      ret[key] = udiff[OLD]
+    else if (OLD_VALUE in udiff) {
+      ret[key] = udiff[OLD_VALUE]
     }
     else {
       ret[key] = diffstory.backward(ret[key], udiff)

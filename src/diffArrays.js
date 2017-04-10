@@ -7,7 +7,7 @@ const { longestCommonSubsequence } = require('./util/lcs')
 const diffstory = require('./diff')
 const { diffObjects } = require('./diffObjects')
 const { isObject, isArray, isDefined } = require('./util/identify')
-const { ADD, REMOVE, UPDATE, CUT, PASTE, NEW, OLD, SKIP } = require('./instructions')
+const { ADD_PROP, REMOVE_PROP, UPDATE_PROP, ADD_ITEM, REMOVE_ITEM, UPDATE_ITEM, CUT_ITEM, PASTE_ITEM, SKIP_ITEM } = require('./instructions')
 
 
 function diffArrays(arr1, arr2) {
@@ -20,8 +20,8 @@ function diffArrays(arr1, arr2) {
   // no LCS?
   if (info.length==0) {
     ret = []
-    if (arr1.length>0) ret.push({[REMOVE]:arr1})
-    if (arr2.length>0) ret.push({[ADD]:arr2})
+    if (arr1.length>0) ret.push({[REMOVE_ITEM]:arr1})
+    if (arr2.length>0) ret.push({[ADD_ITEM]:arr2})
   }
   else {
 
@@ -42,22 +42,22 @@ function diffArrays(arr1, arr2) {
     const rights = diffArrays(right1, right2)
 
     // combine
-    ret = concat(lefts, {[SKIP]:lcs.length}, rights)
+    ret = concat(lefts, {[SKIP_ITEM]:lcs.length}, rights)
   }
 
   // find cut/paste opportunities
   let nextCutId = 1
 
-  // find updates: adjacent REMOVE/ADD that are objects with 1+ common keys
+  // find updates: adjacent REMOVE_ITEM/ADD_ITEM that are objects with 1+ common keys
   // TODO: handle old [{key:1}] and new [1,{key:2}]
   for (let i1=0; i1<ret.length-1; i1++) {
     let i2 = i1 + 1
     const part1 = ret[i1]
     const part2 = ret[i2]
     // add then remove?
-    if (REMOVE in part1 && ADD in part2) {
-      const arr1 = part1[REMOVE]
-      const arr2 = part2[ADD]
+    if (REMOVE_ITEM in part1 && ADD_ITEM in part2) {
+      const arr1 = part1[REMOVE_ITEM]
+      const arr2 = part2[ADD_ITEM]
       // both arrays of size1?
       if (arr1.length==1 && arr2.length==1) {
         const val1 = arr1[0]
@@ -73,21 +73,21 @@ function diffArrays(arr1, arr2) {
     }
   }
 
-  // find reordering: any ADD and REMOVE that are identical
-  // make them CUT and PASTE
+  // find reordering: any ADD_ITEM and REMOVE_ITEM that are identical
+  // make them CUT_ITEM and PASTE_ITEM
   // {cut1:3} means "cut #1 cuts 3 array elements"
   // {paste1:3} means "paste #1 pastes 3 array elements"
   ret.forEach((plusPart,plusIx)=>{
-    const plusValue = plusPart[ADD]
+    const plusValue = plusPart[ADD_ITEM]
     if (isDefined(plusValue)) {
       ret.forEach((minusPart,minusIx)=>{
-        const minusValue = minusPart[REMOVE]
+        const minusValue = minusPart[REMOVE_ITEM]
         if (isDefined(minusValue)) {
           if (isEqual(plusValue, minusValue)) {
             // only do this for bigger structures like objects and arrays
             if (isObject(plusValue) || isArray(plusValue)) {
-              const cut = CUT+nextCutId
-              const paste = PASTE+nextCutId
+              const cut = CUT_ITEM+nextCutId
+              const paste = PASTE_ITEM+nextCutId
               ret[minusIx] = { [cut]: minusValue.length }
               ret[plusIx] = { [paste]: plusValue.length }
               nextCutId += 1
@@ -104,57 +104,57 @@ function diffArrays(arr1, arr2) {
 
 function forwardArray(thing, diff) {
 
-  // collect the cuts first
-  let ix = 0
-  const cuts = {}
-  diff.forEach(part => {
-    if (SKIP in part) {
-      const members = thing.slice(ix, ix+part[SKIP])
-      ix += part[SKIP]
-    }
-    else if (ADD in part) {
-    }
-    else if (REMOVE in part) {
-      ix += part[REMOVE].length
-    }
-    else if (UPDATE in part) {
-      ix += 1
-    }
-    else {
-      // any cuts or pastes?
-      const key = keys(part)[0]        
-      if (key.startsWith(CUT)) {
-        const count = part[key]
-        const members = thing.slice(ix, ix+count)
-        cuts[key] = members
-        ix += count
-      }
-      else if (key.startsWith(PASTE)) {
-      }
-      else {
-        throw 'Bad part: '+JSON.stringify(part)
-      }
+  // // collect the cuts first
+  // let ix = 0
+  // const cuts = {}
+  // diff.forEach(part => {
+  //   if (SKIP_ITEM in part) {
+  //     const members = thing.slice(ix, ix+part[SKIP_ITEM])
+  //     ix += part[SKIP_ITEM]
+  //   }
+  //   else if (ADD_ITEM in part) {
+  //   }
+  //   else if (REMOVE_ITEM in part) {
+  //     ix += part[REMOVE_ITEM].length
+  //   }
+  //   else if (UPDATE_ITEM in part) {
+  //     ix += 1
+  //   }
+  //   else {
+  //     // any cuts or pastes?
+  //     const key = keys(part)[0]        
+  //     if (key.startsWith(CUT_ITEM)) {
+  //       const count = part[key]
+  //       const members = thing.slice(ix, ix+count)
+  //       cuts[key] = members
+  //       ix += count
+  //     }
+  //     else if (key.startsWith(PASTE_ITEM)) {
+  //     }
+  //     else {
+  //       throw 'Bad part: '+JSON.stringify(part)
+  //     }
 
-    }
-  })
+  //   }
+  // })
 
   // now compose our new array
   let ret = []
-  ix = 0 // reset
+  let ix = 0 // reset
   diff.forEach(part => {
 
-    if (SKIP in part) {
-      const members = thing.slice(ix, ix+part[SKIP])
+    if (SKIP_ITEM in part) {
+      const members = thing.slice(ix, ix+part[SKIP_ITEM])
       ret = concat(ret, members)
-      ix += part[SKIP]
+      ix += part[SKIP_ITEM]
     }
-    else if (ADD in part) {
-      ret = concat(ret, part[ADD])
+    else if (ADD_ITEM in part) {
+      ret = concat(ret, part[ADD_ITEM])
     }
-    else if (REMOVE in part) {
-      ix += part[REMOVE].length
+    else if (REMOVE_ITEM in part) {
+      ix += part[REMOVE_ITEM].length
     }
-    else if (UPDATE in part) {
+    else if (UPDATE_ITEM in part || ADD_PROP in part || REMOVE_PROP in part || UPDATE_PROP in part) {
       const member = diffstory.forward(thing[ix], part)
       ret.push(member)
       ix += 1
@@ -162,18 +162,20 @@ function forwardArray(thing, diff) {
     else {
 
       // any cuts or pastes?
-      const key = keys(part)[0]
+      // const key = keys(part)[0]
       
-      if (key.startsWith(CUT)) {
-      }
-      else if (key.startsWith(PASTE)) {
-        const cutsKey = CUT+key.substring(PASTE.length)
-        const members = cuts[cutsKey]
-        ret = concat(ret, members)
-      }
-      else {
-        throw 'Bad part: '+JSON.stringify(part)
-      }
+      // if (key.startsWith(CUT_ITEM)) {
+      // }
+      // else if (key.startsWith(PASTE_ITEM)) {
+      //   const cutsKey = CUT_ITEM+key.substring(PASTE_ITEM.length)
+      //   const members = cuts[cutsKey]
+      //   ret = concat(ret, members)
+      // }
+      // else {
+      //   throw 'Bad part: '+JSON.stringify(part)
+      // }
+
+      throw 'Bad part: '+JSON.stringify(part)
 
     }
   })
@@ -183,77 +185,80 @@ function forwardArray(thing, diff) {
 
 
 function backwardArray(thing, diff) {
-  // collect the pastes first
-  let ix = 0
-  const pastes = {}
-  diff.forEach(part => {
-    if (SKIP in part) {
-      const members = thing.slice(ix, ix+part[SKIP])
-      ix += part[SKIP]
-    }
-    else if (ADD in part) {
-      ix += part[ADD].length
-    }
-    else if (REMOVE in part) {
-    }
-    else if (UPDATE in part) {
-      ix += 1
-    }
-    else {
-      // any cuts or pastes?
-      const key = keys(part)[0]        
-      if (key.startsWith(CUT)) {
-      }
-      else if (key.startsWith(PASTE)) {
-        const count = part[key]
-        const members = thing.slice(ix, ix+count)
-        pastes[key] = members
-        ix += count
-      }
-      else {
-        throw 'Bad part: '+JSON.stringify(part)
-      }
 
-    }
-  })
+  // // collect the pastes first
+  // let ix = 0
+  // const pastes = {}
+  // diff.forEach(part => {
+  //   if (SKIP_ITEM in part) {
+  //     const members = thing.slice(ix, ix+part[SKIP_ITEM])
+  //     ix += part[SKIP_ITEM]
+  //   }
+  //   else if (ADD_ITEM in part) {
+  //     ix += part[ADD_ITEM].length
+  //   }
+  //   else if (REMOVE_ITEM in part) {
+  //   }
+  //   else if (UPDATE_ITEM in part) {
+  //     ix += 1
+  //   }
+  //   else {
+  //     // any cuts or pastes?
+  //     const key = keys(part)[0]        
+  //     if (key.startsWith(CUT_ITEM)) {
+  //     }
+  //     else if (key.startsWith(PASTE_ITEM)) {
+  //       const count = part[key]
+  //       const members = thing.slice(ix, ix+count)
+  //       pastes[key] = members
+  //       ix += count
+  //     }
+  //     else {
+  //       throw 'Bad part: '+JSON.stringify(part)
+  //     }
+
+  //   }
+  // })
 
   // now compose our new array
   let ret = []
-  ix = 0 // reset
+  let ix = 0 // reset
   diff.forEach(part => {
 
-    if (SKIP in part) {
-      const members = thing.slice(ix, ix+part[SKIP])
+    if (SKIP_ITEM in part) {
+      const members = thing.slice(ix, ix+part[SKIP_ITEM])
       ret = concat(ret, members)
-      ix += part[SKIP]
+      ix += part[SKIP_ITEM]
     }
-    else if (ADD in part) {
-      ix += part[ADD].length
+    else if (ADD_ITEM in part) {
+      ix += part[ADD_ITEM].length
     }
-    else if (REMOVE in part) {
-      ret = concat(ret, part[REMOVE])
+    else if (REMOVE_ITEM in part) {
+      ret = concat(ret, part[REMOVE_ITEM])
     }
-    else if (UPDATE in part) {
+    else if (UPDATE_ITEM in part || ADD_PROP in part || REMOVE_PROP in part || UPDATE_PROP in part) {
       const member = diffstory.backward(thing[ix], part)
       ret.push(member)
       ix += 1
     }
     else {
 
-      // any cuts or pastes?
-      const key = keys(part)[0]
+      // // any cuts or pastes?
+      // const key = keys(part)[0]
       
-      if (key.startsWith(CUT)) {
-        const pastesKey = PASTE+key.substring(CUT.length)
-        const members = pastes[pastesKey]
-        ret = concat(ret, members)
-      }
-      else if (key.startsWith(PASTE)) {
-        ix += 1
-      }
-      else {
-        throw 'Bad part: '+JSON.stringify(part)
-      }
+      // if (key.startsWith(CUT_ITEM)) {
+      //   const pastesKey = PASTE_ITEM+key.substring(CUT_ITEM.length)
+      //   const members = pastes[pastesKey]
+      //   ret = concat(ret, members)
+      // }
+      // else if (key.startsWith(PASTE_ITEM)) {
+      //   ix += 1
+      // }
+      // else {
+      //   throw 'Bad part: '+JSON.stringify(part)
+      // }
+
+      throw 'Bad part: '+JSON.stringify(part)
 
     }
   })

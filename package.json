@@ -19,7 +19,8 @@
   },
   "main": "src/diff.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "play": "node play/play.js"
   },
   "dependencies": {
     "babel-preset-es2015": "6.24.0",
