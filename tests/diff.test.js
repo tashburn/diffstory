@@ -20,15 +20,15 @@ test('strings', () => {
   run(
     'ab',
     'bc',
-    '-"a"^1+"c"'
+    '-"a"^"b"+"c"'
   )
 })
 
 test('stringDiffToOperations', () => {
-  const ops = diffstory.stringDiffToOperations('-"a"^1+"c"')
+  const ops = diffstory.stringDiffToOperations('-"a"^"b"+"c"')
   expect(ops).toEqual([
     {'-':'a'},
-    {'^':1},
+    {'^':'b'},
     {'+':'c'},
   ])
 })

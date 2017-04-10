@@ -11,7 +11,7 @@ module.exports = class StringStream {
       return undefined
     const ch = this.string.charAt(this.ix)
     if (expectedChar!=null && expectedChar!=ch)
-      throw 'Expected char '+expectedChar
+      throw 'readChar expected char: '+expectedChar
     this.ix += 1
     return ch
   }

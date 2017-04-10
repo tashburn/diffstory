@@ -35,7 +35,8 @@ function diffStrings(s1, s2) {
   const rights = diffStrings(right1, right2)
 
   // combine
-  const ret = lefts+'^'+lcs.length+rights
+  // const ret = lefts+'^'+lcs.length+rights // just the count
+  const ret = lefts + '^"'+lcs+'"' + rights
 
   return ret
 }
@@ -48,11 +49,14 @@ function stringDiffToOperations(diff) {
   while (!stream.atEnd()) {
     const instr = stream.readChar()
     if (instr == '^') { // skip
-      const skipCount = Number(stream.readWhile(ch => isCharNumber(ch)))
-      const skipped = text.substring(ix,ix+skipCount)
+      // const skipCount = Number(stream.readWhile(ch => isCharNumber(ch)))
+      // const skipped = diff.substring(ix,ix+skipCount)
       // parts.push({'^':skipCount})
+      stream.readChar('"')
+      const skipped = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
+      stream.readChar('"')
       parts.push({'^':skipped})
-      ix += skipCount
+      ix += skipped.length
     }
     else if (instr == '+') { // add
       stream.readChar('"')
@@ -81,10 +85,11 @@ function forwardString(text, diff) {
   let ix = 0
   stringDiffToOperations(diff).forEach(part => {
     if ('^' in part) {
-      const skipCount = part['^']
-      const skipped = text.substring(ix,ix+skipCount)
+      // const skipCount = part['^']
+      // const skipped = text.substring(ix,ix+skipCount)
+      const skipped = part['^']
       parts.push(skipped)
-      ix += skipCount
+      ix += skipped.length
     }
     else if ('+' in part) {
       parts.push(part['+'])
@@ -104,10 +109,11 @@ function backwardString(text, diff) {
   let ix = 0
   stringDiffToOperations(diff).forEach(part => {
     if ('^' in part) {
-      const skipCount = part['^']
-      const skipped = text.substring(ix,ix+skipCount)
+      // const skipCount = part['^']
+      // const skipped = text.substring(ix,ix+skipCount)
+      const skipped = part['^']
       parts.push(skipped)
-      ix += skipCount
+      ix += skipped.length
     }
     else if ('+' in part) {
       ix += part['+'].length
