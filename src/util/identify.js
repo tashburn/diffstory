@@ -1,7 +1,7 @@
 
 function isObject(o) { return typeof o === 'object' && !isArray(o) }
 
-function isArray(o) { return o.constructor === Array }
+function isArray(value) { return Array.isArray(value) }
 
 function isFunction(o) { return typeof o === 'function' }
 
