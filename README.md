@@ -129,7 +129,7 @@ const ops = diffstory.stringDiffToOperations('ab','bc')
 
 // ops is [
 //   {'-':"a"},
-//   {'^':1},
+//   {'^':"b"},
 //   {'+':"c"},
 // ]
 ```

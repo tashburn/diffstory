@@ -49,9 +49,9 @@ function stringDiffToOperations(diff) {
     const instr = stream.readChar()
     if (instr == '^') { // skip
       const skipCount = Number(stream.readWhile(ch => isCharNumber(ch)))
-      // const skipped = text.substring(ix,ix+skipCount)
-      // parts.push(skipped)
-      parts.push({'^':skipCount})
+      const skipped = text.substring(ix,ix+skipCount)
+      // parts.push({'^':skipCount})
+      parts.push({'^':skipped})
       ix += skipCount
     }
     else if (instr == '+') { // add
