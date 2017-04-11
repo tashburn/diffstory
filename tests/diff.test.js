@@ -86,12 +86,18 @@ test('arrays', () => {
 })
 
 test('string operations', () => {
-  const ops = diffstory.operations('ab','bc')
+  let a = 'ab'
+  let b = 'bc'
+  const ops = diffstory.operations(a,b)
   expect(ops).toEqual([
     {'-':'a'},
     {'&':'b'},
     {'+':'c'},
   ])
+  let after = diffstory.operationAfter(op)
+  expect(after).toEqual(b)
+  let before = diffstory.operationBefore(op)
+  expect(before).toEqual(a)
 })
 test('object operations', () => {
   const a = { a:1, b:2 }

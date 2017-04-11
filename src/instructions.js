@@ -25,7 +25,11 @@ const
   SKIP_ITEM = '#item',
   KEEP_ITEM = '&item',
   CUT_ITEM = '^item',
-  PASTE_ITEM = '*item'
+  PASTE_ITEM = '*item',
+
+  ADD_STRING = '+str',
+  REMOVE_STRING = '-str',
+  KEEP_STRING = '&str'
 
 // const
 //   OLD_VALUE = 'old',
@@ -78,5 +82,9 @@ module.exports = {
   KEEP_ITEM,
   CUT_ITEM,
   PASTE_ITEM,
+
+  ADD_STRING,
+  REMOVE_STRING,
+  KEEP_STRING,
 
 }

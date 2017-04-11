@@ -10,6 +10,20 @@ const { isObject, isArray, isDefined } = require('./util/identify')
 const { ADD_PROP, REMOVE_PROP, UPDATE_PROP, ADD_ITEM, REMOVE_ITEM, UPDATE_ITEM, CUT_ITEM, PASTE_ITEM, SKIP_ITEM, KEEP_ITEM } = require('./instructions')
 
 
+function isArrayOperation(op) {
+  if (!isArray(op)) return false
+  if (op.length==0) return true
+  const i = op[0]
+  return ADD_ITEM in i ||
+    REMOVE_ITEM in i ||
+    UPDATE_ITEM in i ||
+    SKIP_ITEM in i ||
+    KEEP_ITEM in i ||
+    CUT_ITEM in i ||
+    PASTE_ITEM in i
+}
+
+
 function arrayOperations(arr1, arr2) {
 
   // find LCS
@@ -102,4 +116,53 @@ function arrayOperations(arr1, arr2) {
 }
 
 
+function arrayOperationForward(op) {
+  ret = []
+  for (let item of op) {
+    const instruction = keys(item)[0]
+    const val = item[instruction]
+    switch (instruction) {
+      case ADD_ITEM: 
+        ret = concat(ret, val)
+        break
+      case REMOVE_ITEM: 
+        break
+      case KEEP_ITEM: 
+        ret = concat(ret, val)
+        break
+      case UPDATE_ITEM: 
+        ret = concat(ret, diffstory.operationAfter(val))
+        break
+    }
+  }
+  return ret
+}
+
+
+function arrayOperationBackward(op) {
+  ret = []
+  for (let item of op) {
+    const instruction = keys(item)[0]
+    const val = item[instruction]
+    switch (instruction) {
+      case ADD_ITEM: 
+        break
+      case REMOVE_ITEM: 
+        ret = concat(ret, val)
+        break
+      case KEEP_ITEM: 
+        ret = concat(ret, val)
+        break
+      case UPDATE_ITEM: 
+        ret = concat(ret, diffstory.operationBefore(val))
+        break
+    }
+  }
+  return ret
+}
+
+
+module.exports.isArrayOperation = isArrayOperation
 module.exports.arrayOperations = arrayOperations
+module.exports.arrayOperationForward = arrayOperationForward
+module.exports.arrayOperationBackward = arrayOperationBackward

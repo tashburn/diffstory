@@ -27,18 +27,19 @@ const diffstory = require('../src/diff')
 // let a = [{a:1}]
 // let b = [{a:2}]
 
-let a = { items:[{name:'joe'}] }
-let b = { items:[{name:'joe',age:32}] }
+let a = [{a:1}]
+let b = [{a:2}]
 
-let d = diffstory.diff(a,b)
+let op = diffstory.operations(a,b)
 
-console.log(JSON.stringify(d,null,2))
+console.log(JSON.stringify(op,null,2))
 
-// let bb = diffstory.forward(a,d)
+let before = diffstory.operationBefore(op)
 
-// console.log(JSON.stringify(bb,null,2))
+console.log(JSON.stringify(before,null,2))
 
-let aa = diffstory.backward(b,d)
+let after = diffstory.operationAfter(op)
 
-console.log(JSON.stringify(aa,null,2))
+console.log(JSON.stringify(after,null,2))
+
 

@@ -1,13 +1,24 @@
 const difference = require('lodash/difference')
 const intersection = require('lodash/intersection')
 const keys = require('lodash/keys')
+const merge = require('lodash/merge')
 const cloneDeep = require('lodash/cloneDeep')
 const isEmpty = require('lodash/isEmpty')
 const isEqual = require('lodash/isEqual')
 
+const { isString, isObject } = require('./util/identify')
 const diffstory = require('./diff')
-const { isString } = require('./util/identify')
 const { ADD_PROP, REMOVE_PROP, UPDATE_PROP, KEEP_PROP, NEW_VALUE, OLD_VALUE } = require('./instructions')
+require('./util/functional')
+
+
+function isObjectOperation(op) {
+  return isObject(op) && 
+    (ADD_PROP in op ||
+    REMOVE_PROP in op ||
+    UPDATE_PROP in op ||
+    KEEP_PROP in op)
+}
 
 
 function objectOperations(object1, object2) {
@@ -50,4 +61,59 @@ function objectOperations(object1, object2) {
 }
 
 
+function objectOperationAfter(op) {
+  let ret = {}
+  for (let key of keys(op)) {
+    console.log('key: '+key)
+    const val = op[key]
+    switch (key) {
+      case ADD_PROP:
+        ret = merge(ret, val)
+        break
+      case REMOVE_PROP:
+        break
+      case UPDATE_PROP:
+        const kv = val.map((k,v) => [k, diffstory.operationAfter(v)])
+        ret = merge(ret, kv)
+        break
+      case KEEP_PROP:
+        ret = merge(ret, val)
+        break
+      default:
+        throw 'bad instruction: '+key
+    }
+  }
+  return ret
+}
+
+
+function objectOperationBefore(op) {
+  let ret = {}
+  for (let key of keys(op)) {
+    console.log('key: '+key)
+    const val = op[key]
+    switch (key) {
+      case ADD_PROP:
+        break
+      case REMOVE_PROP:
+        ret = merge(ret, val)
+        break
+      case UPDATE_PROP:
+        const kv = val.map((k,v) => [k, diffstory.operationBefore(v)])
+        ret = merge(ret, kv)
+        break
+      case KEEP_PROP:
+        ret = merge(ret, val)
+        break
+      default:
+        throw 'bad instruction: '+key
+    }
+  }
+  return ret
+}
+
+
+module.exports.isObjectOperation = isObjectOperation
 module.exports.objectOperations = objectOperations
+module.exports.objectOperationAfter = objectOperationAfter
+module.exports.objectOperationBefore = objectOperationBefore
