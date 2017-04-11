@@ -16,6 +16,10 @@ const {
   SKIP_ITEM,
   KEEP_ITEM,
 
+  ADD_STRING,
+  REMOVE_STRING,
+  KEEP_STRING,
+
 } = require('../src/instructions')
 
 
@@ -90,13 +94,13 @@ test('string operations', () => {
   let b = 'bc'
   const ops = diffstory.operations(a,b)
   expect(ops).toEqual([
-    {'-':'a'},
-    {'&':'b'},
-    {'+':'c'},
+    {[REMOVE_STRING]:'a'},
+    {[KEEP_STRING]:'b'},
+    {[ADD_STRING]:'c'},
   ])
-  let after = diffstory.operationAfter(op)
+  let after = diffstory.operationAfter(ops)
   expect(after).toEqual(b)
-  let before = diffstory.operationBefore(op)
+  let before = diffstory.operationBefore(ops)
   expect(before).toEqual(a)
 })
 test('object operations', () => {
