@@ -42,7 +42,8 @@ function diffArrays(arr1, arr2) {
     const rights = diffArrays(right1, right2)
 
     // combine
-    ret = concat(lefts, {[SKIP_ITEM]:lcs.length}, rights)
+    // ret = concat(lefts, {[SKIP_ITEM]:lcs.length}, rights) // don't include the content
+    ret = concat(lefts, {[SKIP_ITEM]:lcs}, rights) // include the content
   }
 
   // find cut/paste opportunities
