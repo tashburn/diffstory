@@ -46,20 +46,29 @@ function diffStringsCompact(s1, s2, options={}) {
     const w2 = tokenizeWords(s2)
     seq = longestCommonSubsequence(w1, w2)
 
-    // convert seq info back to string info
-    info = { offset1: 0, offset2: 0, length: 0 }
-    for (let i=0; i<seq.offset1; i+=1) {
-      info.offset1 += w1[i].length
+    if (seq.length==0) {
+      info = { offset1: null, offset2: null, length: 0 }
+    } else {
+
+      console.log('seq\n'+JSON.stringify(seq,null,2))
+
+      // convert seq info back to string info
+      info = { offset1: 0, offset2: 0, length: 0 }
+      for (let i=0; i<seq.offset1; i+=1) {
+        info.offset1 += w1[i].length
+      }
+      info.offset1 += seq.offset1 // spaces
+      for (let i=0; i<seq.offset2; i+=1) {
+        info.offset2 += w2[i].length
+      }
+      info.offset2 += seq.offset2 // spaces
+      for (let i=seq.offset1; i<seq.offset1+seq.length; i+=1) {
+        info.length += w1[i].length
+      }
+      info.length += seq.length-1 // spaces
+
+      console.log('info\n'+JSON.stringify(info,null,2))
     }
-    info.offset1 += seq.offset1 // spaces
-    for (let i=0; i<seq.offset2; i+=1) {
-      info.offset2 += w2[i].length
-    }
-    info.offset2 += seq.offset2 // spaces
-    for (let i=seq.offset1; i<seq.offset1+seq.length; i+=1) {
-      info.length += w1[i].length
-    }
-    info.length += seq.length-1 // spaces
   }
 
   // no LCS?
