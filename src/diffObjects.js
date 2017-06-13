@@ -36,7 +36,7 @@ function diffObjects(object1, object2) {
   keysShared.forEach(k => {
     const v1 = object1[k]
     const v2 = object2[k]
-    if (!isEqual(v1,v2))
+    if (isEqual(v1,v2))
       kept[k] = v1
     else
       updated[k] = diffstory.diff(v1,v2)

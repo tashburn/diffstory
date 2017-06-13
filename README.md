@@ -31,8 +31,8 @@ const diff = diffstory.diff(obj1, obj2)
 // diff is { 
 //   '+prop': {d:4}, 
 //   '-prop': {a:1}, 
-//   '!prop': {b:{old:2,new:20}}
-//   '&prop': {b:{old:2,new:20}}
+//   '!prop': {b:{'-val':2,'+val':20}}
+//   '&prop': {c:3}
 // }
 ```
 
@@ -73,7 +73,7 @@ const a = [1]
 const b = [1,2]
 const d = diffstory.diff(a,b)
 
-// d is [ {'#item':[1]}, {'+item':[2]} ]
+// d is [ {'&item':[1]}, {'+item':[2]} ]
 ```
 
 Removals
@@ -82,7 +82,7 @@ const a = [1,2]
 const b = [1]
 const d = diffstory.diff(a,b)
 
-// d is [ {'#item':[1]}, {'-item':[2]} ]
+// d is [ {'&item':[1]}, {'-item':[2]} ]
 ```
 
 Updates
@@ -91,7 +91,7 @@ const a = [{k:1}]
 const b = [{k:2}]
 const d = diffstory.diff(a,b)
 
-// d is [ {update:{k:{old:1,new:2}}} ]
+// d is [ {'!item':{k:{old:1,new:2}}} ]
 ```
 
 ## Diffing Strings
