@@ -27,19 +27,16 @@ const diffstory = require('../src/diff')
 // let a = [{a:1}]
 // let b = [{a:2}]
 
-let a = [{a:1}]
-let b = [{a:2}]
+// let d = diffstory.diff('ab','bc')
+// console.log(JSON.stringify(d,null,2))
 
-let op = diffstory.operations(a,b)
+// let before = diffstory.operationBefore(op)
 
-console.log(JSON.stringify(op,null,2))
+// console.log(JSON.stringify(before,null,2))
 
-let before = diffstory.operationBefore(op)
+// let after = diffstory.operationAfter(op)
 
-console.log(JSON.stringify(before,null,2))
+// console.log(JSON.stringify(after,null,2))
 
-let after = diffstory.operationAfter(op)
-
-console.log(JSON.stringify(after,null,2))
-
-
+const d = diffstory.diffStringsCompact('ab','bc')
+console.log(JSON.stringify(d,null,2))

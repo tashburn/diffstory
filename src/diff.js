@@ -7,7 +7,7 @@ const { isBoolean, isNumber, isString, isObject, isArray } = require('./util/ide
 const instructions = require('./instructions')
 const { diffObjects, forwardObject, backwardObject } = require('./diffObjects')
 const { diffArrays, forwardArray, backwardArray } = require('./diffArrays')
-const { diffStrings, forwardString, backwardString, stringDiffToOperations } = require('./diffStrings')
+const { diffStrings, diffStringsCompact, forwardString, backwardString, stringDiffToOperations } = require('./diffStrings')
 const { operations, operationAfter, operationBefore } = require('./operations')
 
 const { NEW_VALUE, OLD_VALUE } = instructions
@@ -90,6 +90,8 @@ module.exports.instructions = instructions
 module.exports.diff = diff
 module.exports.forward = forward
 module.exports.backward = backward
+
+module.exports.diffStringsCompact = diffStringsCompact
 
 // module.exports.stringDiffToOperations = stringDiffToOperations
 module.exports.operations = operations

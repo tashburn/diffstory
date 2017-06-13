@@ -5,6 +5,13 @@ const { ADD_STRING, REMOVE_STRING, KEEP_STRING, ADD_STRING_COMPACT, REMOVE_STRIN
 
 
 function diffStrings(s1, s2) {
+  const compact = diffStringsCompact(s1,s2)
+  // console.log('compact: '+compact)
+  return stringDiffToOperations(compact)
+}
+
+
+function diffStringsCompact(s1, s2) {
 
   // find LCS
   const info = longestCommonSubstring(s1, s2)
@@ -32,8 +39,8 @@ function diffStrings(s1, s2) {
   const right2 = s2.substring(ix2+lcs.length)
 
   // recurse
-  const lefts = diffStrings(left1, left2)
-  const rights = diffStrings(right1, right2)
+  const lefts = diffStringsCompact(left1, left2)
+  const rights = diffStringsCompact(right1, right2)
 
   // combine
   // const ret = lefts+'^'+lcs.length+rights // just the count
@@ -130,7 +137,8 @@ function backwardString(text, diff) {
 
 
 module.exports = {
-  diffStrings, 
+  diffStrings,
+  diffStringsCompact,
   stringDiffToOperations, 
   forwardString, 
   backwardString,

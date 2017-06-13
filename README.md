@@ -96,18 +96,8 @@ const d = diffstory.diff(a,b)
 
 ## Diffing Strings
 
-For strings, a "longest common subsequence" algorithm is used to produce diffs in a compact string format like `'-"a"^1+"c"'`. This format is used so that its type (string) could be used to distinguish it from other kinds of diffs in complex nested diff representations. However, you can convert this format to a nice array of operations for processing.
+For strings, a "longest common subsequence" algorithm is used to produce diffs.
 
-Additions, Removals, Keeps
-```
-const d = diffstory.diff('ab','bc')
-
-// d is '-"a"&"b"+"c"' (- means `remove`, & means `keep`, + means `add`)
-```
-
-## Processing String Diffs
-
-A diff of strings like `'-"a"^1+"c"'` is compact but not very processable. You can get it as an array of operations instead, using `operations`
 ```
 const ops = diffstory.operations('ab','bc')
 
@@ -116,6 +106,16 @@ const ops = diffstory.operations('ab','bc')
 //   {'&str':"b"},
 //   {'+str':"c"},
 // ]
+```
+
+## Diffing Strings, Compactly
+
+There's also a more compact form of diff for strings.
+
+```
+const d = diffstory.diffStringsCompact('ab','bc')
+
+// d is '-"a"&"b"+"c"' (- means `remove`, & means `keep`, + means `add`)
 ```
 
 ## Applying Diffs

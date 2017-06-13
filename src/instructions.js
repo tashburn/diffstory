@@ -29,7 +29,7 @@ const
 
   ADD_STRING = '+str',
   REMOVE_STRING = '-str',
-  KEEP_STRING = '&str'
+  KEEP_STRING = '&str',
 
   ADD_STRING_COMPACT = '+',
   REMOVE_STRING_COMPACT = '-',
@@ -90,5 +90,9 @@ module.exports = {
   ADD_STRING,
   REMOVE_STRING,
   KEEP_STRING,
+
+  ADD_STRING_COMPACT,
+  REMOVE_STRING_COMPACT,
+  KEEP_STRING_COMPACT,
 
 }
