@@ -24,14 +24,15 @@ npm i --save diffstory
 ```
 import diffstory from 'diffstory'
 
-const obj1 = { a:1, b:2 }
-const obj2 = { b:20, c:3 }
+const obj1 = { a:1, b:2, c:3 }
+const obj2 = { b:2, c:30, d:4 }
 const diff = diffstory.diff(obj1, obj2) 
 
 // diff is { 
-//   add: {c:3}, 
-//   remove: {a:1}, 
-//   update: {b:{old:2,new:20}}
+//   '+prop': {d:4}, 
+//   '-prop': {a:1}, 
+//   '!prop': {b:{old:2,new:20}}
+//   '&prop': {b:{old:2,new:20}}
 // }
 ```
 
@@ -72,7 +73,7 @@ const a = [1]
 const b = [1,2]
 const d = diffstory.diff(a,b)
 
-// d is [ {skip:1}, {add:[2]} ]
+// d is [ {'#item':[1]}, {'+item':[2]} ]
 ```
 
 Removals
@@ -81,7 +82,7 @@ const a = [1,2]
 const b = [1]
 const d = diffstory.diff(a,b)
 
-// d is [ {skip:1}, {remove:[2]} ]
+// d is [ {'#item':[1]}, {'-item':[2]} ]
 ```
 
 Updates
@@ -113,14 +114,14 @@ const d = diffstory.diff('ab','a')
 
 ## Processing String Diffs
 
-A diff of strings like `'-"a"^1+"c"'` is compact but not very processable. You can get it as an array of operations instead, using `stringDiffToOperations`
+A diff of strings like `'-"a"^1+"c"'` is compact but not very processable. You can get it as an array of operations instead, using `operations`
 ```
-const ops = diffstory.stringDiffToOperations('ab','bc')
+const ops = diffstory.operations('ab','bc')
 
 // ops is [
-//   {'-':"a"},
-//   {'^':"b"},
-//   {'+':"c"},
+//   {'-str':"a"},
+//   {'&str':"b"},
+//   {'+str':"c"},
 // ]
 ```
 

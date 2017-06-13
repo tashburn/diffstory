@@ -7,7 +7,7 @@ const { longestCommonSubsequence } = require('./util/lcs')
 const diffstory = require('./diff')
 const { diffObjects } = require('./diffObjects')
 const { isObject, isArray, isDefined } = require('./util/identify')
-const { ADD_PROP, REMOVE_PROP, UPDATE_PROP, ADD_ITEM, REMOVE_ITEM, UPDATE_ITEM, CUT_ITEM, PASTE_ITEM, SKIP_ITEM } = require('./instructions')
+const { ADD_PROP, REMOVE_PROP, UPDATE_PROP, ADD_ITEM, REMOVE_ITEM, UPDATE_ITEM, KEEP_ITEM, CUT_ITEM, PASTE_ITEM, SKIP_ITEM } = require('./instructions')
 
 
 function diffArrays(arr1, arr2) {
@@ -43,7 +43,7 @@ function diffArrays(arr1, arr2) {
 
     // combine
     // ret = concat(lefts, {[SKIP_ITEM]:lcs.length}, rights) // don't include the content
-    ret = concat(lefts, {[SKIP_ITEM]:lcs}, rights) // include the content
+    ret = concat(lefts, {[KEEP_ITEM]:lcs}, rights) // include the content
   }
 
   // find cut/paste opportunities

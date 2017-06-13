@@ -7,7 +7,7 @@ const isEqual = require('lodash/isEqual')
 
 const diffstory = require('./diff')
 const { isString } = require('./util/identify')
-const { ADD_PROP, REMOVE_PROP, UPDATE_PROP, NEW_VALUE, OLD_VALUE } = require('./instructions')
+const { ADD_PROP, REMOVE_PROP, UPDATE_PROP, KEEP_PROP, NEW_VALUE, OLD_VALUE } = require('./instructions')
 
 
 function diffObjects(object1, object2) {
@@ -32,14 +32,19 @@ function diffObjects(object1, object2) {
     diff[REMOVE_PROP] = removed
 
   const updated = {}
+  const kept = {}
   keysShared.forEach(k => {
     const v1 = object1[k]
     const v2 = object2[k]
     if (!isEqual(v1,v2))
+      kept[k] = v1
+    else
       updated[k] = diffstory.diff(v1,v2)
   })
   if (!isEmpty(updated)) 
     diff[UPDATE_PROP] = updated
+  if (!isEmpty(kept)) 
+    diff[KEEP_PROP] = kept
 
   return diff  
 }
