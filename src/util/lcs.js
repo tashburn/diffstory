@@ -1,8 +1,8 @@
 // import isEqual from 'lodash/isEqual'
-const isEqual = require('lodash/isEqual')
+const lodashIsEqual = require('lodash/isEqual')
 
 
-function longestCommonSubstring(str1, str2){
+function longestCommonSubstring(str1, str2) {
 
   if (!str1 || !str2)
     return {
@@ -28,7 +28,7 @@ function longestCommonSubstring(str1, str2){
   for (let i = 0; i < len1; i++) {
     for (let j = 0; j < len2; j++) {
       // if (str1[i] !== str2[j])
-      if (!isEqual(str1[i], str2[j]))
+      if (!lodashIsEqual(str1[i], str2[j]))
         num[i][j] = 0
       else {
         if ((i === 0) || (j === 0))
@@ -56,7 +56,8 @@ function longestCommonSubstring(str1, str2){
 }
 
 
-function longestCommonSubsequence(arr1, arr2){
+function longestCommonSubsequence( arr1, arr2, isEqual=(a,b)=>lodashIsEqual(a,b) ) {
+// function longestCommonSubsequence( arr1, arr2 ) {
 
   if (!arr1 || !arr2) return { offset1: 0, offset2: 0, length: 0 }
  

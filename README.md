@@ -94,6 +94,10 @@ const d = diffstory.diff(a,b)
 // d is [ {'!item': {'!prop': {k: { '-val':1, '+val':2 } } } } ]
 ```
 
+# Diffing Arrays of Objects
+
+If you pass in the option `{ sameId : (a,b) => {..} }`, then when diffing arrays of objects, the algorithm will be able to recognize when an object has been changed. Otherwise, it removes that object and adds another.
+
 ## Diffing Strings
 
 For strings, a "longest common subsequence" algorithm is used to produce diffs.

@@ -14,7 +14,9 @@ const { NEW_VALUE, OLD_VALUE } = instructions
 
 
 function diff(thing1, thing2, options={}) {
-
+  // console.log('diff options: '+JSON.stringify(options,null,2))
+  // const sameId = (typeof o !== 'undefined')
+  // console.log('diff options: '+sameId)
   // console.log('diff '+thing1+" vs "+thing2+", options "+options)
 
   // optimized case: objects (add,remove,update)

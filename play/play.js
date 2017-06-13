@@ -1,49 +1,27 @@
 // This is code to play around with
 
 const diffstory = require('../src/diff')
-const jsdiff = require('diff')
+// const jsdiff = require('diff')
 
-// let a = { 
-//   items: [
-//     { name: 'joe' }
-//   ] 
-// }
 
-// let b = { 
-//   items: [
-//     { name: 'joe', age: 32 }
-//   ] 
-// }
+const sameId = (o1,o2) => (o1.id===o2.id)
 
-// let a = [
-//   { name: 'joe' }
-// ] 
+a = [{id:1,val:"happy"}/*,{id:0,val:'blah'}*/]
+b = [{id:1,val:"sad"}]
+options = { sameId: sameId, words:true }
+// options = { }
 
-// let b = [
-//   { name: 'joe', age: 32 }
-// ] 
+// console.log(sameId({id:1},{id:1}))
 
-// let a = [{a:1},{b:2}]
-// let b = [{b:2},{a:1}]
-// let a = [{a:1}]
-// let b = [{a:2}]
+// console.log(JSON.stringify(options,null,2))
 
-// let d = diffstory.diff('ab','bc')
-// console.log(JSON.stringify(d,null,2))
+// function isDefined(o) { return typeof o !== 'undefined' }
 
-// let before = diffstory.operationBefore(op)
+// console.log(isDefined(options.sameId))
 
-// console.log(JSON.stringify(before,null,2))
+// options = { }
 
-// let after = diffstory.operationAfter(op)
-
-// console.log(JSON.stringify(after,null,2))
-
-const d = diffstory.diff(
-  "a",
-  "",
-  { words: true },
-)
+const d = diffstory.diff(a, b, options)
 
 console.log(JSON.stringify(d,null,2))
 
