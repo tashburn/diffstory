@@ -63,7 +63,7 @@ function stringDiffToOperations(diff) {
       stream.readChar('"')
       const kept = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
       stream.readChar('"')
-      parts.push({KEEP_STRING:kept})
+      parts.push({[KEEP_STRING]:kept})
       ix += kept.length
     }
     else if (instr == ADD_STRING_COMPACT) { // add
@@ -71,14 +71,14 @@ function stringDiffToOperations(diff) {
       const added = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
       stream.readChar('"')
       // parts.push(added)
-      parts.push({ADD_STRING:added})
+      parts.push({[ADD_STRING]:added})
     }
     else if (instr == REMOVE_STRING_COMPACT) { // remove
       stream.readChar('"')
       const removed = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
       stream.readChar('"')
       ix += removed.length
-      parts.push({REMOVE_STRING:removed})
+      parts.push({[REMOVE_STRING]:removed})
     }
     else {
       throw 'bad instruction '+instr
