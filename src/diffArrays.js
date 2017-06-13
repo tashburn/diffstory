@@ -66,7 +66,7 @@ function diffArrays(arr1, arr2, options={}) {
         // both objects?
         if (isObject(val1) && isObject(val2)) {
           if (intersection(keys(val1),keys(val2)).length > 0) {
-            ret[i1] = { [UPDATE_ITEM]: diffObjects(val1, val2) }
+            ret[i1] = { [UPDATE_ITEM]: diffObjects(val1, val2, options) }
             ret.splice(i2, 1) // remove at index i2
           }
         }
