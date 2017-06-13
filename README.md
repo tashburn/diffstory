@@ -31,8 +31,8 @@ const diff = diffstory.diff(obj1, obj2)
 // diff is { 
 //   '+prop': {d:4}, 
 //   '-prop': {a:1}, 
-//   '!prop': {b:{'-val':2,'+val':20}}
-//   '&prop': {c:3}
+//   '!prop': {c:{'-val':3,'+val':30}}
+//   '&prop': {b:2}
 // }
 ```
 
@@ -44,7 +44,7 @@ const a = { a:1 }
 const b = { a:1, b:2 }
 const d = diffstory.diff(a,b)
 
-// d is { add:{b:2} }
+// d is { '+prop':{b:2}, '&prop':{a:1} }
 ```
 
 Removals
@@ -53,7 +53,7 @@ const a = { k1:1, k2:2 }
 const b = { k1:1 }
 const d = diffstory.diff(a,b)
 
-// d is { remove:{k2:2} }
+// d is { '-prop':{k2:2}, '&prop':{k1:1} }
 ```
 
 Updates
@@ -62,7 +62,7 @@ const a = { k1:1 }
 const b = { k1:2 }
 const d = diffstory.diff(a,b)
 
-// d is { update:{k1:2} }
+// d is { '!prop': { k1: { '-val':1, '+val':2 } } }
 ```
 
 ## Diffing Arrays
@@ -91,25 +91,18 @@ const a = [{k:1}]
 const b = [{k:2}]
 const d = diffstory.diff(a,b)
 
-// d is [ {'!item':{k:{old:1,new:2}}} ]
+// d is [ {'!item': {'!prop': {k: { '-val':1, '+val':2 } } } } ]
 ```
 
 ## Diffing Strings
 
 For strings, a "longest common subsequence" algorithm is used to produce diffs in a compact string format like `'-"a"^1+"c"'`. This format is used so that its type (string) could be used to distinguish it from other kinds of diffs in complex nested diff representations. However, you can convert this format to a nice array of operations for processing.
 
-Additions
+Additions, Removals, Keeps
 ```
-const d = diffstory.diff('-"a"^1+"c"')
+const d = diffstory.diff('ab','bc')
 
-// d is '^1+"b"' (^ means `skip`, + means `add`)
-```
-
-Removals
-```
-const d = diffstory.diff('ab','a')
-
-// d is '^1-"b"' (^ means `skip`, - means `remove`)
+// d is '-"a"&"b"+"c"' (- means `remove`, & means `keep`, + means `add`)
 ```
 
 ## Processing String Diffs

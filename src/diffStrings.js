@@ -1,6 +1,7 @@
 const { longestCommonSubstring } = require('./util/lcs')
 const { isCharNumber } = require('./util/identify')
 const StringStream = require('./util/StringStream')
+const { ADD_STRING, REMOVE_STRING, KEEP_STRING, ADD_STRING_COMPACT, REMOVE_STRING_COMPACT, KEEP_STRING_COMPACT } = require('./instructions')
 
 
 function diffStrings(s1, s2) {
@@ -13,8 +14,8 @@ function diffStrings(s1, s2) {
     let ret = ''
     s1 = s1.replace(/"/g, '\\"')
     s2 = s2.replace(/"/g, '\\"')
-    if (s1.length>0) ret+='-"'+s1+'"'
-    if (s2.length>0) ret+='+"'+s2+'"'
+    if (s1.length>0) ret += REMOVE_STRING_COMPACT + '"' + s1 + '"'
+    if (s2.length>0) ret += ADD_STRING_COMPACT + '"' + s2 + '"'
     return ret
   }
 
@@ -36,7 +37,7 @@ function diffStrings(s1, s2) {
 
   // combine
   // const ret = lefts+'^'+lcs.length+rights // just the count
-  const ret = lefts + '^"'+lcs+'"' + rights
+  const ret = lefts + KEEP_STRING_COMPACT + '"' + lcs + '"' + rights
 
   return ret
 }
@@ -48,29 +49,29 @@ function stringDiffToOperations(diff) {
   const stream = new StringStream(diff)
   while (!stream.atEnd()) {
     const instr = stream.readChar()
-    if (instr == '^') { // skip
+    if (instr == KEEP_STRING_COMPACT) { // skip
       // const skipCount = Number(stream.readWhile(ch => isCharNumber(ch)))
       // const skipped = diff.substring(ix,ix+skipCount)
       // parts.push({'^':skipCount})
       stream.readChar('"')
-      const skipped = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
+      const kept = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
       stream.readChar('"')
-      parts.push({'^':skipped})
-      ix += skipped.length
+      parts.push({KEEP_STRING:kept})
+      ix += kept.length
     }
-    else if (instr == '+') { // add
+    else if (instr == ADD_STRING_COMPACT) { // add
       stream.readChar('"')
       const added = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
       stream.readChar('"')
       // parts.push(added)
-      parts.push({'+':added})
+      parts.push({ADD_STRING:added})
     }
-    else if (instr == '-') { // remove
+    else if (instr == REMOVE_STRING_COMPACT) { // remove
       stream.readChar('"')
       const removed = stream.readUntil((ch,info) => ch=='"' && info.prev()!='\\')
       stream.readChar('"')
       ix += removed.length
-      parts.push({'-':removed})
+      parts.push({REMOVE_STRING:removed})
     }
     else {
       throw 'bad instruction '+instr
@@ -84,18 +85,18 @@ function forwardString(text, diff) {
   const parts = []
   let ix = 0
   stringDiffToOperations(diff).forEach(part => {
-    if ('^' in part) {
+    if (KEEP_STRING in part) {
       // const skipCount = part['^']
       // const skipped = text.substring(ix,ix+skipCount)
-      const skipped = part['^']
+      const skipped = part[KEEP_STRING]
       parts.push(skipped)
       ix += skipped.length
     }
-    else if ('+' in part) {
-      parts.push(part['+'])
+    else if (ADD_STRING in part) {
+      parts.push(part[ADD_STRING])
     }
-    else if ('-' in part) {
-      ix += part['-'].length
+    else if (REMOVE_STRING in part) {
+      ix += part[REMOVE_STRING].length
     }
     else throw 'bad instruction '+JSON.stringify(part)
   })
@@ -108,18 +109,18 @@ function backwardString(text, diff) {
   const parts = []
   let ix = 0
   stringDiffToOperations(diff).forEach(part => {
-    if ('^' in part) {
+    if (KEEP_STRING in part) {
       // const skipCount = part['^']
       // const skipped = text.substring(ix,ix+skipCount)
-      const skipped = part['^']
+      const skipped = part[KEEP_STRING]
       parts.push(skipped)
       ix += skipped.length
     }
-    else if ('+' in part) {
-      ix += part['+'].length
+    else if (ADD_STRING in part) {
+      ix += part[ADD_STRING].length
     }
-    else if ('-' in part) {
-      parts.push(part['-'])
+    else if (REMOVE_STRING in part) {
+      parts.push(part[REMOVE_STRING])
     }
     else throw 'bad instruction '+JSON.stringify(part)
   })

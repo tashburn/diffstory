@@ -31,6 +31,10 @@ const
   REMOVE_STRING = '-str',
   KEEP_STRING = '&str'
 
+  ADD_STRING_COMPACT = '+',
+  REMOVE_STRING_COMPACT = '-',
+  KEEP_STRING_COMPACT = '&'
+
 // const
 //   OLD_VALUE = 'old',
 //   NEW_VALUE = 'new',
