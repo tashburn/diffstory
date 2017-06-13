@@ -13,18 +13,18 @@ const { operations, operationAfter, operationBefore } = require('./operations')
 const { NEW_VALUE, OLD_VALUE } = instructions
 
 
-function diff(thing1, thing2) {
+function diff(thing1, thing2, options={}) {
   // optimized case: objects (add,remove,update)
   if (isObject(thing1) && isObject(thing2)) {
-    return diffObjects(thing1, thing2)
+    return diffObjects(thing1, thing2, options)
   }
   // optimized case: arrays (add,remove,update,cut,paste)
   else if (isArray(thing1) && isArray(thing2)) {
-    return diffArrays(thing1, thing2)
+    return diffArrays(thing1, thing2, options)
   }
   // optimized case: strings
   else if (isString(thing1) && isString(thing2)) {
-    return diffStrings(thing1, thing2)
+    return diffStrings(thing1, thing2, options)
   }
   // typical case (old/new)
   else {

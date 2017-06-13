@@ -1,20 +1,66 @@
-const { longestCommonSubstring } = require('./util/lcs')
+// const jsdiff = require('diff')
+
+const { longestCommonSubstring, longestCommonSubsequence } = require('./util/lcs')
 const { isCharNumber } = require('./util/identify')
 const StringStream = require('./util/StringStream')
+const { tokenizeWords } = require('./util/tokenize')
 const { ADD_STRING, REMOVE_STRING, KEEP_STRING, ADD_STRING_COMPACT, REMOVE_STRING_COMPACT, KEEP_STRING_COMPACT } = require('./instructions')
 
 
-function diffStrings(s1, s2) {
-  const compact = diffStringsCompact(s1,s2)
-  // console.log('compact: '+compact)
-  return stringDiffToOperations(compact)
+function diffStrings(s1, s2, options={}) {
+  // const words = options.words===true || false
+
+  // if (!words) {
+    const compact = diffStringsCompact(s1,s2,options)
+    // console.log('compact: '+compact)
+    return stringDiffToOperations(compact)
+  // } else {
+  //   const result = jsdiff.diffWords(s1,s2)
+  //   console.log(JSON.stringify(result,null,2))
+  //   const ops = []
+  //   for (let part of result) {  
+  //     if (part.added) {
+  //       ops.push({[ADD_STRING]:part.value})
+  //     } else if (part.removed) {
+  //       ops.push({[REMOVE_STRING]:part.value})
+  //     } else {
+  //       ops.push({[KEEP_STRING]:part.value})
+  //     }
+  //   }
+  //   return ops
+  // }
 }
 
 
-function diffStringsCompact(s1, s2) {
+function diffStringsCompact(s1, s2, options={}) {
 
+  const words = options.words===true || false
+  
   // find LCS
-  const info = longestCommonSubstring(s1, s2)
+  let info
+  if (!words) {
+    info = longestCommonSubstring(s1, s2)
+  }
+  else {
+    const w1 = tokenizeWords(s1)
+    const w2 = tokenizeWords(s2)
+    seq = longestCommonSubsequence(w1, w2)
+
+    // convert seq info back to string info
+    info = { offset1: 0, offset2: 0, length: 0 }
+    for (let i=0; i<seq.offset1; i+=1) {
+      info.offset1 += w1[i].length
+    }
+    info.offset1 += seq.offset1 // spaces
+    for (let i=0; i<seq.offset2; i+=1) {
+      info.offset2 += w2[i].length
+    }
+    info.offset2 += seq.offset2 // spaces
+    for (let i=seq.offset1; i<seq.offset1+seq.length; i+=1) {
+      info.length += w1[i].length
+    }
+    info.length += seq.length-1 // spaces
+  }
 
   // no LCS?
   if (info.length==0) {
@@ -39,8 +85,8 @@ function diffStringsCompact(s1, s2) {
   const right2 = s2.substring(ix2+lcs.length)
 
   // recurse
-  const lefts = diffStringsCompact(left1, left2)
-  const rights = diffStringsCompact(right1, right2)
+  const lefts = diffStringsCompact(left1, left2, options)
+  const rights = diffStringsCompact(right1, right2, options)
 
   // combine
   // const ret = lefts+'^'+lcs.length+rights // just the count

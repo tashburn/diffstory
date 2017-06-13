@@ -10,7 +10,7 @@ const { isObject, isArray, isDefined } = require('./util/identify')
 const { ADD_PROP, REMOVE_PROP, UPDATE_PROP, ADD_ITEM, REMOVE_ITEM, UPDATE_ITEM, KEEP_ITEM, CUT_ITEM, PASTE_ITEM, SKIP_ITEM } = require('./instructions')
 
 
-function diffArrays(arr1, arr2) {
+function diffArrays(arr1, arr2, options={}) {
 
   // find LCS
   const info = longestCommonSubsequence(arr1, arr2)

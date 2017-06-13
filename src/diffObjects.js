@@ -10,7 +10,7 @@ const { isString } = require('./util/identify')
 const { ADD_PROP, REMOVE_PROP, UPDATE_PROP, KEEP_PROP, NEW_VALUE, OLD_VALUE } = require('./instructions')
 
 
-function diffObjects(object1, object2) {
+function diffObjects(object1, object2, options={}) {
 
   const diff = {}
 

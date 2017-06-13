@@ -1,6 +1,7 @@
 // This is code to play around with
 
 const diffstory = require('../src/diff')
+const jsdiff = require('diff')
 
 // let a = { 
 //   items: [
@@ -38,5 +39,11 @@ const diffstory = require('../src/diff')
 
 // console.log(JSON.stringify(after,null,2))
 
-const d = diffstory.diffStringsCompact('ab','bc')
+const d = diffstory.diff(
+  'one two three',
+  'two three four',
+  { words: true },
+)
+
 console.log(JSON.stringify(d,null,2))
+

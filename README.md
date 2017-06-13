@@ -99,12 +99,27 @@ const d = diffstory.diff(a,b)
 For strings, a "longest common subsequence" algorithm is used to produce diffs.
 
 ```
-const ops = diffstory.operations('ab','bc')
+const d = diffstory.diff('ab','bc')
 
-// ops is [
-//   {'-str':"a"},
-//   {'&str':"b"},
-//   {'+str':"c"},
+// d is [
+//   { "-str": "a" },
+//   { "&str": "b" },
+//   { "+str": "c" },
+// ]
+```
+
+If you want to diff on words instead of characters, pass in the following option
+```
+const d = diffstory.diff(
+  'one two',
+  'two three',
+  { words: true },
+)
+
+// d is [
+//   { "-str": "one " },
+//   { "&str": "two" },
+//   { "+str": " three" },
 // ]
 ```
 
