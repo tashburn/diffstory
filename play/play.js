@@ -40,8 +40,8 @@ const jsdiff = require('diff')
 // console.log(JSON.stringify(after,null,2))
 
 const d = diffstory.diff(
-  'one two three',
-  'two for the show',
+  {a:'one two three'},
+  {a:'two for the show'},
   { words: true },
 )
 

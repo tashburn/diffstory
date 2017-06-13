@@ -14,6 +14,9 @@ const { NEW_VALUE, OLD_VALUE } = instructions
 
 
 function diff(thing1, thing2, options={}) {
+
+  // console.log('diff '+thing1+" vs "+thing2+", options "+options)
+
   // optimized case: objects (add,remove,update)
   if (isObject(thing1) && isObject(thing2)) {
     return diffObjects(thing1, thing2, options)
