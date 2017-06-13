@@ -50,7 +50,7 @@ function diffStringsCompact(s1, s2, options={}) {
       info = { offset1: null, offset2: null, length: 0 }
     } else {
 
-      console.log('seq\n'+JSON.stringify(seq,null,2))
+      // console.log('seq\n'+JSON.stringify(seq,null,2))
 
       // convert seq info back to string info
       info = { offset1: 0, offset2: 0, length: 0 }
@@ -67,7 +67,7 @@ function diffStringsCompact(s1, s2, options={}) {
       }
       info.length += seq.length-1 // spaces
 
-      console.log('info\n'+JSON.stringify(info,null,2))
+      // console.log('info\n'+JSON.stringify(info,null,2))
     }
   }
 
