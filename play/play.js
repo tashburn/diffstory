@@ -41,7 +41,7 @@ const jsdiff = require('diff')
 
 const d = diffstory.diff(
   'one two three',
-  'two three four',
+  'two for the show',
   { words: true },
 )
 

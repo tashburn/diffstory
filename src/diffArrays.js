@@ -38,8 +38,8 @@ function diffArrays(arr1, arr2, options={}) {
     const right2 = arr2.slice(ix2+lcs.length)
 
     // recurse
-    const lefts = diffArrays(left1, left2)
-    const rights = diffArrays(right1, right2)
+    const lefts = diffArrays(left1, left2, options)
+    const rights = diffArrays(right1, right2, options)
 
     // combine
     // ret = concat(lefts, {[SKIP_ITEM]:lcs.length}, rights) // don't include the content

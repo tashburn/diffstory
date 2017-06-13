@@ -39,7 +39,7 @@ function diffObjects(object1, object2, options={}) {
     if (isEqual(v1,v2))
       kept[k] = v1
     else
-      updated[k] = diffstory.diff(v1,v2)
+      updated[k] = diffstory.diff(v1,v2,options)
   })
   if (!isEmpty(updated)) 
     diff[UPDATE_PROP] = updated
