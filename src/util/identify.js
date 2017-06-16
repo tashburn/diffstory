@@ -1,3 +1,10 @@
+const {
+  VALUE_INSTRUCTIONS,
+  STRING_INSTRUCTIONS,
+  OBJECT_INSTRUCTIONS,
+  ARRAY_INSTRUCTIONS,
+} = require('../instructions')
+
 
 function isObject(o) { return typeof o === 'object' && !isArray(o) }
 
@@ -23,6 +30,30 @@ function exists(o) { return isDefined(o) && !isNull(o) }
 
 function isCharNumber(ch) { return isString(ch) && ch.length==1 && /([0-9])/.test(ch) }
 
+// diff identification
+function isBooleanDiff(d) { return isObject(d) && hasInstrKey(d, VALUE_INSTRUCTIONS) }
+function isNumberDiff(d) { return isObject(d) && hasInstrKey(d, VALUE_INSTRUCTIONS) }
+function isStringDiff(d) { return isArray(d) && hasInstrKey(d, STRING_INSTRUCTIONS) }
+function isObjectDiff(d) { return isObject(d) && hasInstrKey(d, OBJECT_INSTRUCTIONS) }
+function isArrayDiff(d) { return isArray(d) && hasInstrKey(d, ARRAY_INSTRUCTIONS) }
+function hasInstrKey(d, instructions) {
+  if (isObject(d)) {
+    return instructions.reduce( (acc,instr) => { return acc || (instr in d) }, false)
+  }
+  else if (isArray(d)) {
+    if (d.length==0) 
+      return true
+    for (let item of d) {
+      if (!isObject(item))
+        return false
+      if (instructions.reduce( (acc,instr) => { return acc || (instr in item) }, false))
+        return true
+    }
+    return false
+  }
+  else
+    throw new Error('not an obj or arr: '+JSON.stringify(d))
+}
 
 module.exports = {
   isObject: isObject,
@@ -37,4 +68,9 @@ module.exports = {
   isUndefined: isUndefined,
   exists: exists,
   isCharNumber: isCharNumber,
+  isBooleanDiff,
+  isNumberDiff,
+  isStringDiff,
+  isObjectDiff,
+  isArrayDiff,
 }

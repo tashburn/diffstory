@@ -143,10 +143,11 @@ function stringDiffToOperations(diff) {
 }
 
 
-function forwardString(text, diff) {
+function forwardString(diff) {
   const parts = []
   let ix = 0
-  stringDiffToOperations(diff).forEach(part => {
+  // stringDiffToOperations(diff).forEach(part => {
+  diff.forEach(part => {
     if (KEEP_STRING in part) {
       // const skipCount = part['^']
       // const skipped = text.substring(ix,ix+skipCount)
@@ -162,15 +163,16 @@ function forwardString(text, diff) {
     }
     else throw 'bad instruction '+JSON.stringify(part)
   })
-  parts.push(text.substring(ix))
+  // parts.push(text.substring(ix))
   return parts.join('')
 }
 
 
-function backwardString(text, diff) {
+function backwardString(diff) {
   const parts = []
   let ix = 0
-  stringDiffToOperations(diff).forEach(part => {
+  // stringDiffToOperations(diff).forEach(part => {
+  diff.forEach(part => {
     if (KEEP_STRING in part) {
       // const skipCount = part['^']
       // const skipped = text.substring(ix,ix+skipCount)
@@ -186,7 +188,7 @@ function backwardString(text, diff) {
     }
     else throw 'bad instruction '+JSON.stringify(part)
   })
-  parts.push(text.substring(ix))
+  // parts.push(text.substring(ix))
   return parts.join('')
 }
 

@@ -50,8 +50,9 @@ function diffObjects(object1, object2, options={}) {
 }
 
 
-function forwardObject(thing, diff) {
-  const ret = cloneDeep(thing)
+function forwardObject(diff) {
+  // const ret = cloneDeep(thing)
+  const ret = {}
   
   const add = diff[ADD_PROP]
   for (let key in add || {}) {
@@ -61,6 +62,11 @@ function forwardObject(thing, diff) {
   const remove = diff[REMOVE_PROP]
   for (let key in remove || {}) {
     delete ret[key]
+  }
+
+  const keep = diff[KEEP_PROP]
+  for (let key in keep || {}) {
+    ret[key] = keep[key]
   }
 
   const update = diff[UPDATE_PROP]
@@ -81,9 +87,9 @@ function forwardObject(thing, diff) {
 }
 
 
-function backwardObject(thing, diff) {
-
-  const ret = cloneDeep(thing)
+function backwardObject(diff) {
+  // const ret = cloneDeep(thing)
+  const ret = {}
   
   const add = diff[ADD_PROP]
   for (let key in add || {}) {
@@ -93,6 +99,11 @@ function backwardObject(thing, diff) {
   const remove = diff[REMOVE_PROP]
   for (let key in remove || {}) {
     ret[key] = remove[key]
+  }
+
+  const keep = diff[KEEP_PROP]
+  for (let key in keep || {}) {
+    ret[key] = keep[key]
   }
 
   const update = diff[UPDATE_PROP]

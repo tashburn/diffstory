@@ -159,7 +159,7 @@ function diffArrays(arr1, arr2, options={}) {
 }
 
 
-function forwardArray(thing, diff) {
+function forwardArray(diff) {
 
   // // collect the cuts first
   // let ix = 0
@@ -208,11 +208,14 @@ function forwardArray(thing, diff) {
     else if (ADD_ITEM in part) {
       ret = concat(ret, part[ADD_ITEM])
     }
+    else if (KEEP_ITEM in part) {
+      ret = concat(ret, part[KEEP_ITEM])
+    }
     else if (REMOVE_ITEM in part) {
       ix += part[REMOVE_ITEM].length
     }
     else if (UPDATE_ITEM in part) {
-      const member = diffstory.forward(thing[ix], part[UPDATE_ITEM])
+      const member = diffstory.forward(part[UPDATE_ITEM])
       ret.push(member)
       ix += 1
     }
@@ -241,7 +244,7 @@ function forwardArray(thing, diff) {
 }
 
 
-function backwardArray(thing, diff) {
+function backwardArray(diff) {
 
   // // collect the pastes first
   // let ix = 0
@@ -287,6 +290,9 @@ function backwardArray(thing, diff) {
       ret = concat(ret, members)
       ix += part[SKIP_ITEM]
     }
+    else if (KEEP_ITEM in part) {
+      ret = concat(ret, part[KEEP_ITEM])
+    }
     else if (ADD_ITEM in part) {
       ix += part[ADD_ITEM].length
     }
@@ -294,7 +300,7 @@ function backwardArray(thing, diff) {
       ret = concat(ret, part[REMOVE_ITEM])
     }
     else if (UPDATE_ITEM in part) {
-      const member = diffstory.backward(thing[ix], part[UPDATE_ITEM])
+      const member = diffstory.backward(part[UPDATE_ITEM])
       ret.push(member)
       ix += 1
     }

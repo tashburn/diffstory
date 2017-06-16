@@ -3,25 +3,73 @@
 const diffstory = require('../src/diff')
 // const jsdiff = require('diff')
 
+function debug(...args) {
+  console.log(...args)
+}
 
-const sameId = (o1,o2) => (o1.id===o2.id)
 
-a = [{id:1,val:"happy"}/*,{id:0,val:'blah'}*/]
-b = [{id:1,val:"sad"}]
-options = { sameId: sameId, words:true }
-// options = { }
+// objects
+// const a = [{id:1,a:1,b:2}]
+// const b = [{id:1,b:22,c:33}]
+// const diff = diffstory.diff(a,b,{sameId: (a,b)=>a.id===b.id})
+// debug('diff',diff)
+// const update = diff[0]['!item']
+// debug('update',update)
+// const back = diffstory.backward(update)
+// const fore = diffstory.forward(update)
+// debug('back',back)
+// debug('fore',fore)
 
-// console.log(sameId({id:1},{id:1}))
+// arrays of primitives
+// const a = [1,2]
+// const b = [2,3]
+// const diff = diffstory.diff(a,b)
+// debug('diff',diff)
+// const back = diffstory.backward(diff)
+// const fore = diffstory.forward(diff)
+// debug('back',back)
+// debug('fore',fore)
 
-// console.log(JSON.stringify(options,null,2))
+// arrays of objects
+const a = [{a:1},{b:2},{d:4}]
+const b = [{b:2},{c:3},{d:44}]
+const diff = diffstory.diff(a,b)
+debug('diff',diff)
+const back = diffstory.backward(diff)
+const fore = diffstory.forward(diff)
+debug('back',back)
+debug('fore',fore)
 
-// function isDefined(o) { return typeof o !== 'undefined' }
+// boolean
+// const a = true
+// const b = false
+// const diff = diffstory.diff(a,b)
+// debug('diff',diff)
+// debug('old '+diff['-val'])
+// debug('new '+diff['+val'])
+// const back = diffstory.backward(diff)
+// const fore = diffstory.forward(diff)
+// debug('back',back)
+// debug('fore',fore)
 
-// console.log(isDefined(options.sameId))
+// number
+// const a = 1
+// const b = 2
+// const diff = diffstory.diff(a,b)
+// debug('diff',diff)
+// debug('old '+diff['-val'])
+// debug('new '+diff['+val'])
+// const back = diffstory.backward(diff)
+// const fore = diffstory.forward(diff)
+// debug('back',back)
+// debug('fore',fore)
 
-// options = { }
-
-const d = diffstory.diff(a, b, options)
-
-console.log(JSON.stringify(d,null,2))
-
+// string
+// const a = "ab"
+// const b = 'bc'
+// const diff = diffstory.diff(a,b)
+// debug('diff',diff)
+// const back = diffstory.backward(diff)
+// const fore = diffstory.forward(diff)
+// debug('back',back)
+// debug('fore',fore)

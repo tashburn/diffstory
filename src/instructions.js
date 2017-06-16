@@ -1,14 +1,3 @@
-// const 
-//   ADD = 'add',
-//   REMOVE = 'remove',
-//   NEW = 'new',
-//   OLD = 'old',
-//   UPDATE = 'update',
-//   SKIP = 'skip',
-//   CUT = 'cut',
-//   PASTE = 'paste'
-
-// module.exports = { ADD, REMOVE, NEW, OLD, UPDATE, SKIP, CUT, PASTE }
 
 const
   OLD_VALUE = '-val',
@@ -34,6 +23,47 @@ const
   ADD_STRING_COMPACT = '+',
   REMOVE_STRING_COMPACT = '-',
   KEEP_STRING_COMPACT = '&'
+
+const
+  VALUE_INSTRUCTIONS = [ OLD_VALUE, NEW_VALUE ],
+  OBJECT_INSTRUCTIONS = [ ADD_PROP, REMOVE_PROP, UPDATE_PROP, KEEP_PROP ],
+  ARRAY_INSTRUCTIONS = [ ADD_ITEM, REMOVE_ITEM, UPDATE_ITEM, SKIP_ITEM, KEEP_ITEM, CUT_ITEM, PASTE_ITEM ],
+  STRING_INSTRUCTIONS = [ ADD_STRING, REMOVE_STRING, KEEP_STRING ],
+  COMPACT_STRING_INSTRUCTIONS = [ ADD_STRING_COMPACT, REMOVE_STRING_COMPACT, KEEP_STRING_COMPACT ]
+
+module.exports = { 
+
+  OLD_VALUE,
+  NEW_VALUE,
+
+  ADD_PROP,
+  REMOVE_PROP,
+  UPDATE_PROP,
+  KEEP_PROP,
+
+  ADD_ITEM,
+  REMOVE_ITEM,
+  UPDATE_ITEM,
+  SKIP_ITEM,
+  KEEP_ITEM,
+  CUT_ITEM,
+  PASTE_ITEM,
+
+  ADD_STRING,
+  REMOVE_STRING,
+  KEEP_STRING,
+
+  ADD_STRING_COMPACT,
+  REMOVE_STRING_COMPACT,
+  KEEP_STRING_COMPACT,
+
+  VALUE_INSTRUCTIONS,
+  OBJECT_INSTRUCTIONS,
+  ARRAY_INSTRUCTIONS,
+  STRING_INSTRUCTIONS,
+  COMPACT_STRING_INSTRUCTIONS,
+
+}
 
 // const
 //   OLD_VALUE = 'old',
@@ -69,30 +99,15 @@ const
 //   CUT_ITEM = '^',
 //   PASTE_ITEM = '*'
 
-module.exports = { 
 
-  OLD_VALUE,
-  NEW_VALUE,
+// const 
+//   ADD = 'add',
+//   REMOVE = 'remove',
+//   NEW = 'new',
+//   OLD = 'old',
+//   UPDATE = 'update',
+//   SKIP = 'skip',
+//   CUT = 'cut',
+//   PASTE = 'paste'
 
-  ADD_PROP,
-  REMOVE_PROP,
-  UPDATE_PROP,
-  KEEP_PROP,
-
-  ADD_ITEM,
-  REMOVE_ITEM,
-  UPDATE_ITEM,
-  SKIP_ITEM,
-  KEEP_ITEM,
-  CUT_ITEM,
-  PASTE_ITEM,
-
-  ADD_STRING,
-  REMOVE_STRING,
-  KEEP_STRING,
-
-  ADD_STRING_COMPACT,
-  REMOVE_STRING_COMPACT,
-  KEEP_STRING_COMPACT,
-
-}
+// module.exports = { ADD, REMOVE, NEW, OLD, UPDATE, SKIP, CUT, PASTE }

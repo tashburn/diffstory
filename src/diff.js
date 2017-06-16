@@ -4,6 +4,7 @@ const cloneDeep = require('lodash/cloneDeep')
 const isEqual = require('lodash/isEqual')
 
 const { isBoolean, isNumber, isString, isObject, isArray } = require('./util/identify')
+const { isBooleanDiff, isNumberDiff, isStringDiff, isObjectDiff, isArrayDiff } = require('./util/identify')
 const instructions = require('./instructions')
 const { diffObjects, forwardObject, backwardObject } = require('./diffObjects')
 const { diffArrays, forwardArray, backwardArray } = require('./diffArrays')
@@ -41,43 +42,43 @@ function diff(thing1, thing2, options={}) {
 }
 
 
-function forward(thing, diff) {
-  if (isBoolean(thing)) {
+function forward(diff) {
+  if (isBooleanDiff(diff)) {
     return diff[NEW_VALUE]
   }
-  else if (isNumber(thing)) {
+  else if (isNumberDiff(diff)) {
     return diff[NEW_VALUE]
   }
-  else if (isString(thing)) {
-    return forwardString(thing, diff)
+  else if (isStringDiff(diff)) {
+    return forwardString(diff)
   }
-  else if (isObject(thing)) {
-    return forwardObject(thing, diff)
+  else if (isObjectDiff(diff)) {
+    return forwardObject(diff)
   }
-  else if (isArray(thing)) {
-    return forwardArray(thing, diff)
+  else if (isArrayDiff(diff)) {
+    return forwardArray(diff)
   }
-  else throw 'Bad type: '+typeof(thing)
+  else throw 'Bad type: '+typeof(diff)
 }
 
 
-function backward(thing, diff) {
-  if (isBoolean(thing)) {
+function backward(diff) {
+  if (isBooleanDiff(diff)) {
     return diff[OLD_VALUE]
   }
-  else if (isNumber(thing)) {
+  else if (isNumberDiff(diff)) {
     return diff[OLD_VALUE]
   }
-  else if (isString(thing)) {
-    return backwardString(thing, diff)
+  else if (isStringDiff(diff)) {
+    return backwardString(diff)
   }
-  else if (isObject(thing)) {
-    return backwardObject(thing, diff)
+  else if (isObjectDiff(diff)) {
+    return backwardObject(diff)
   }
-  else if (isArray(thing)) {
-    return backwardArray(thing, diff)
+  else if (isArrayDiff(diff)) {
+    return backwardArray(diff)
   }
-  else throw 'Bad type: '+typeof(thing)
+  else throw 'Bad type: '+typeof(diff)
 }
 
 
