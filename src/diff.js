@@ -58,7 +58,7 @@ function forward(diff) {
   else if (isArrayDiff(diff)) {
     return forwardArray(diff)
   }
-  else throw 'Bad type: '+typeof(diff)
+  else throw new Error('Bad type: '+typeof(diff))
 }
 
 
@@ -78,7 +78,7 @@ function backward(diff) {
   else if (isArrayDiff(diff)) {
     return backwardArray(diff)
   }
-  else throw 'Bad type: '+typeof(diff)
+  else throw new Error('Bad type: '+typeof(diff))
 }
 
 

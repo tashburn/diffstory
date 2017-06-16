@@ -1,6 +1,7 @@
 // This is code to play around with
 
 const diffstory = require('../src/diff')
+const { isObjectDiff } = require('../src/util/identify')
 // const jsdiff = require('diff')
 
 function debug(...args) {
@@ -31,14 +32,14 @@ function debug(...args) {
 // debug('fore',fore)
 
 // arrays of objects
-const a = [{a:1},{b:2},{d:4}]
-const b = [{b:2},{c:3},{d:44}]
-const diff = diffstory.diff(a,b)
-debug('diff',diff)
-const back = diffstory.backward(diff)
-const fore = diffstory.forward(diff)
-debug('back',back)
-debug('fore',fore)
+// const a = [{a:1},{b:2},{d:4}]
+// const b = [{b:2},{c:3},{d:44}]
+// const diff = diffstory.diff(a,b)
+// debug('diff',diff)
+// const back = diffstory.backward(diff)
+// const fore = diffstory.forward(diff)
+// debug('back',back)
+// debug('fore',fore)
 
 // boolean
 // const a = true
@@ -73,3 +74,44 @@ debug('fore',fore)
 // const fore = diffstory.forward(diff)
 // debug('back',back)
 // debug('fore',fore)
+
+// custom
+
+const diff = {
+  "!prop": {
+    "name": [
+      {
+        "&str": "one"
+      },
+      {
+        "+str": " oh yes"
+      }
+    ]
+  },
+  "&prop": {
+    "id": 1,
+    "description": "",
+    "properties": {
+      "properties": [],
+      "nextId": 1
+    },
+    "texts": {
+      "texts": [],
+      "nextId": 1
+    },
+    "resources": {
+      "resources": [],
+      "nextId": 1
+    },
+    "references": {
+      "references": [],
+      "nextId": 1
+    }
+  }
+}
+debug('diff',diff)
+// debug('isObjectDiff '+ isObjectDiff(diff))
+const back = diffstory.backward(diff)
+const fore = diffstory.forward(diff)
+debug('back',back)
+debug('fore',fore)

@@ -72,15 +72,16 @@ function forwardObject(diff) {
   const update = diff[UPDATE_PROP]
   for (let key in update || {}) {
     const udiff = update[key]
-    if (isString(udiff)) {
-      ret[key] = diffstory.forward(ret[key], udiff)
-    }
-    else if (OLD_VALUE in udiff) {
-      ret[key] = udiff[NEW_VALUE]
-    }
-    else {
-      ret[key] = diffstory.forward(ret[key], udiff)
-    }
+    ret[key] = diffstory.forward(udiff)
+    // if (isString(udiff)) {
+    //   ret[key] = diffstory.forward(ret[key], udiff)
+    // }
+    // else if (OLD_VALUE in udiff) {
+    //   ret[key] = udiff[NEW_VALUE]
+    // }
+    // else {
+    //   ret[key] = diffstory.forward(ret[key], udiff)
+    // }
   }
 
   return ret  
@@ -109,15 +110,16 @@ function backwardObject(diff) {
   const update = diff[UPDATE_PROP]
   for (let key in update || {}) {
     const udiff = update[key]
-    if (isString(udiff)) {
-      ret[key] = diffstory.backward(ret[key], udiff)
-    }
-    else if (OLD_VALUE in udiff) {
-      ret[key] = udiff[OLD_VALUE]
-    }
-    else {
-      ret[key] = diffstory.backward(ret[key], udiff)
-    }
+    ret[key] = diffstory.backward(udiff)
+    // if (isString(udiff)) {
+    //   ret[key] = diffstory.backward(ret[key], udiff)
+    // }
+    // else if (OLD_VALUE in udiff) {
+    //   ret[key] = udiff[OLD_VALUE]
+    // }
+    // else {
+    //   ret[key] = diffstory.backward(ret[key], udiff)
+    // }
   }
 
   return ret  
