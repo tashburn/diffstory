@@ -21,8 +21,10 @@ function diffArrays(arr1, arr2, options={}) {
   // no LCS?
   if (info.length==0) {
     ret = []
-    if (arr1.length>0) ret.push({[REMOVE_ITEM]:arr1})
-    if (arr2.length>0) ret.push({[ADD_ITEM]:arr2})
+    // if (arr1.length>0) ret.push({[REMOVE_ITEM]:arr1})
+    // if (arr2.length>0) ret.push({[ADD_ITEM]:arr2})
+    if (arr1.length>0) arr1.forEach(m => ret.push({[REMOVE_ITEM]:m}) )
+    if (arr2.length>0) arr2.forEach(m => ret.push({[ADD_ITEM]:m}) )
   }
   else {
 
@@ -41,7 +43,7 @@ function diffArrays(arr1, arr2, options={}) {
     // recurse
     const lefts = diffArrays(left1, left2, options)
     const rights = diffArrays(right1, right2, options)
-    let middles = { [KEEP_ITEM]: lcs }
+    let middles = lcs.map( m => ({ [KEEP_ITEM]: m }) )
 
     // if sameId was used, some of the lcs might be object updates
     // console.log('options: '+JSON.stringify(options,null,2))
@@ -59,7 +61,8 @@ function diffArrays(arr1, arr2, options={}) {
           anyUpdates = true
           tmp.push({[UPDATE_ITEM]: diffObjects(v1, v2, options)})
         } else {
-          tmp.push({[KEEP_ITEM]: [v1]})
+          // tmp.push({[KEEP_ITEM]: [v1]})
+          tmp.push({[KEEP_ITEM]: v1})
         }
       }
       if (anyUpdates)
@@ -155,8 +158,34 @@ function diffArrays(arr1, arr2, options={}) {
   //   }
   // })
 
+  // ret = flatten(ret)
+
   return ret
 }
+
+
+// instead of a diff like [ { keep:[1,2] } ], will be [ {keep:1}, {keep:2} ]
+// which is easier to process
+// function flatten(ops) {
+//   const ret = []
+//   for (let op of ops) {
+//     console.log('op: '+JSON.stringify(op))
+//     if (ADD_ITEM in op) {
+//       for (let item of op[ADD_ITEM])
+//         ret.push({[ADD_ITEM]:item})
+//     } else if (REMOVE_ITEM in op) {
+//       for (let item of op[REMOVE_ITEM])
+//         ret.push({[REMOVE_ITEM]:item})
+//     } else if (KEEP_ITEM in op) {
+//       for (let item of op[KEEP_ITEM])
+//         ret.push({[KEEP_ITEM]:item})
+//     } else if (UPDATE_ITEM in op) {
+//       for (let item of op[UPDATE_ITEM])
+//         ret.push({[UPDATE_ITEM]:item})
+//     } else throw new Error('bad op: '+JSON.stringify(op))
+//   }
+//   return ret
+// }
 
 
 function forwardArray(diff) {
